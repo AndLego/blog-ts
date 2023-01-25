@@ -11,8 +11,8 @@ interface CreatePostProps {
 const CreatePost = ({ user, update, setUpdate }: CreatePostProps) => {
   const [create, setCreate] = React.useState(false);
   const { addPost } = useAPI();
-  const titleRef = React.useRef(null);
-  const contentRef = React.useRef(null);
+  const titleRef = React.useRef<HTMLInputElement>(null!);
+  const contentRef = React.useRef<HTMLInputElement>(null!);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -24,7 +24,15 @@ const CreatePost = ({ user, update, setUpdate }: CreatePostProps) => {
       .join("-");
     const content = contentRef.current.value;
 
-    addPost(title, slug, content, user, uuidv4());
+    const post = {
+      title: title,
+      slug: slug,
+      content: content,
+      author: user,
+      id: uuidv4(),
+    };
+
+    addPost(post);
 
     setUpdate(!update);
   };

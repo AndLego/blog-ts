@@ -76,13 +76,13 @@ function useAuth() {
  * redireccion al login si no hay un usuario registrado
  */
 
-function AuthRoute(props: ProviderProps) {
+function AuthRoute({ children }: ProviderProps) {
   const { user } = useAuth();
 
   if (!user) {
     return <Navigate to="/login" />;
   }
-  return props.children;
+  return <>{children}</>;
 }
 
 export { AuthProvider, useAuth, defaultUsers, AuthRoute };

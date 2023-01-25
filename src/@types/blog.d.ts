@@ -10,6 +10,8 @@ export interface Blog {
   id: string | number;
 }
 
+export interface EditBlog extends Omit<Blog, "author"> { }
+
 /**
  * interface context provider
  */
@@ -22,7 +24,7 @@ export interface ProviderProps {
  * types auth
  */
 
-export interface Role{
+export interface Role {
   write: boolean,
   read: boolean,
   delete: boolean,

@@ -2,7 +2,6 @@ import { useAuth } from "../utils/auth";
 
 const ProfilePage = () => {
   const { user } = useAuth();
-  console.log(user);
 
   return (
     <>

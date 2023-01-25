@@ -1,10 +1,11 @@
 import React from "react";
-import { Blog, ProviderProps } from "../@types/blog";
+import { Blog, EditBlog, ProviderProps } from "../@types/blog";
 
 interface APIContextProps {
   blogData: Blog[];
   addPost: (post: Blog) => void;
-  //   deletePost: (id: number) => void;
+  editPost: (editedPost: EditBlog) => void;
+  deletePost: (id: string | number) => void;
 }
 
 const APIContext = React.createContext<APIContextProps>({} as APIContextProps);
@@ -40,7 +41,7 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
       title: post.title,
       slug: post.slug,
       content: post.content,
-      author: post.content,
+      author: post.author,
       id: post.id,
     };
 
@@ -52,7 +53,26 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
     console.log("post creado");
   };
 
-  const data = { blogData, addPost };
+  const deletePost = (id: string | number) => {
+    const post = blogData.findIndex((post) => post.id === id);
+    if (post !== -1) {
+      blogData.splice(post, 1);
+    }
+    console.log("post deleted");
+  };
+
+  const editPost = (editedPost: EditBlog) => {
+    // const post = blogData.find((post) => post.id === id);
+    blogData.forEach((post) => {
+      if (post.id === editedPost.id) {
+        post.title = editedPost.title;
+        post.slug = editedPost.slug;
+        post.content = editedPost.content;
+      }
+    });
+  };
+
+  const data = { blogData, addPost, deletePost, editPost };
 
   return <APIContext.Provider value={data}>{children}</APIContext.Provider>;
 };

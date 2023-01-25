@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { useAPI } from "../utils/blogAPI";
@@ -6,24 +6,24 @@ import { useAPI } from "../utils/blogAPI";
 const EditForm = () => {
   const { blogData, editPost } = useAPI();
   const { user } = useAuth();
-  const editTitleRef = React.useRef(null);
-  const editContentRef = React.useRef(null);
+  const editTitleRef = React.useRef<HTMLInputElement>(null!);
+  const editContentRef = React.useRef<HTMLInputElement>(null!);
 
   const navigate = useNavigate();
   const { slug } = useParams();
 
-  if (user?.role.write !== true) {
+  if (user?.rol.write !== true) {
     return <Navigate to="/unauthorized" />;
   }
 
-  const post = blogData.find((post) => post.slug === slug);
+  const post = blogData.filter((post) => post.slug === slug)[0];
 
   React.useEffect(() => {
     if (editTitleRef.current) editTitleRef.current.value = post.title;
     if (editContentRef.current) editContentRef.current.value = post.content;
   }, []);
 
-  const postEdit = (e) => {
+  const postEdit = (e: FormEvent) => {
     e.preventDefault();
 
     const title = editTitleRef.current.value;
@@ -33,7 +33,14 @@ const EditForm = () => {
       .join("-");
     const content = editContentRef.current.value;
 
-    editPost(post.id, title, slug, content);
+    const editedPost = {
+      id: post.id,
+      title: title,
+      slug: slug,
+      content: content,
+    };
+
+    editPost(editedPost);
 
     navigate(`/blog/${slug}`);
   };
