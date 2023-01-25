@@ -1,10 +1,16 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import { Blog } from "../@types/blog";
+import { useAuth } from "../utils/auth";
 import { useAPI } from "../utils/blogAPI";
+import CreatePost from "./CreatePost";
 
 const BlogMain = () => {
+  const [update, setUpdate] = React.useState(false);
   const { blogData } = useAPI();
+  const { user } = useAuth();
+
+  React.useEffect(() => {}, [update]);
 
   return (
     <>
@@ -19,6 +25,14 @@ const BlogMain = () => {
           </li>
         ))}
       </ul>
+
+      {user?.rol.write && (
+        <CreatePost
+          user={user.username}
+          setUpdate={setUpdate}
+          update={update}
+        />
+      )}
     </>
   );
 };

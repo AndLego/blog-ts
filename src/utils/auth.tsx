@@ -1,21 +1,29 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { ProviderProps, ROL, Roles, User } from "../@types/blog";
+import { useNavigate, Navigate } from "react-router-dom";
+import { ProviderProps, Role, User } from "../@types/blog";
 
-const AuthContext = React.createContext({});
+interface AuthContextProps {
+  user: User | null;
+  login: (username: string | undefined) => void;
+  logOut: () => void;
+}
 
-const defaultRoles: Roles = {
-  [ROL.ADMIN]: {
+const AuthContext = React.createContext<AuthContextProps>(
+  {} as AuthContextProps
+);
+
+const defaultRoles: { [key: string]: Role } = {
+  admin: {
     write: true,
     read: true,
     delete: true,
   },
-  [ROL.EDITOR]: {
+  editor: {
     write: true,
     read: true,
     delete: false,
   },
-  [ROL.VISITOR]: {
+  visitor: {
     write: false,
     read: true,
     delete: false,
@@ -25,11 +33,11 @@ const defaultRoles: Roles = {
 const defaultUsers: User[] = [
   {
     username: "Andres",
-    rol: ROL.ADMIN,
+    rol: defaultRoles.admin,
   },
   {
     username: "Felipe",
-    rol: ROL.EDITOR,
+    rol: defaultRoles.editor,
   },
 ];
 
@@ -42,7 +50,7 @@ const AuthProvider = ({ children }: ProviderProps) => {
     const rol = defaultUsers.find((user) => user.username === username);
     rol !== undefined
       ? setUser(rol)
-      : setUser({ username: username || "Anonimo", rol: ROL.VISITOR });
+      : setUser({ username: username || "Anonimo", rol: defaultRoles.visitor });
   };
 
   const logOut = () => {
@@ -54,3 +62,27 @@ const AuthProvider = ({ children }: ProviderProps) => {
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
+
+/**
+ * hook para evitar importar context en cada pagina que se necesite
+ */
+
+function useAuth() {
+  const auth = React.useContext(AuthContext);
+  return auth;
+}
+
+/**
+ * redireccion al login si no hay un usuario registrado
+ */
+
+function AuthRoute(props: ProviderProps) {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+  return props.children;
+}
+
+export { AuthProvider, useAuth, defaultUsers, AuthRoute };

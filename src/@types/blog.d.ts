@@ -22,25 +22,13 @@ export interface ProviderProps {
  * types auth
  */
 
-export enum ROL {
-  ADMIN = "admin",
-  EDITOR = "editor",
-  VISITOR = "visitor",
-}
-
-export interface Rol {
-  write: boolean;
-  read: boolean;
-  delete: boolean;
-}
-
-export interface Roles {
-  [ROL.ADMIN]: Rol;
-  [ROL.EDITOR]: Rol;
-  [ROL.VISITOR]: Rol;
+export interface Role{
+  write: boolean,
+  read: boolean,
+  delete: boolean,
 }
 
 export interface User {
-  username: string;
-  rol: ROL;
+  username: string,
+  rol: Role
 }
