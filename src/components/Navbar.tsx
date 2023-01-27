@@ -1,13 +1,23 @@
-import { routes } from "./routes";
+import { logs, routes } from "./routes";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../utils/auth";
+import { Link } from "react-router-dom";
+import notebook from "../assets/notebook.svg";
+
+import styles from "../styles/navbar.module.css";
 
 const Navbar = () => {
   const { user } = useAuth();
 
   return (
-    <nav>
-      <ul>
+    <nav className={styles.nav}>
+      <Link to="/">
+        <div>
+          <img src={notebook} alt="logo" />
+          <p>LeBlog</p>
+        </div>
+      </Link>
+      <ul className={styles.menu}>
         {routes.map((route) => {
           if (route.publicOnly && user) return null;
           if (route.private && !user) return null;
@@ -17,9 +27,22 @@ const Navbar = () => {
                 key={route.id}
                 to={route.to}
                 style={({ isActive }) => ({
-                  color: isActive ? "red" : "blue",
+                  color: isActive ? "#FB6D17" : "#3f3f3f",
                 })}
               >
+                {route.text}
+              </NavLink>
+            </li>
+          );
+        })}
+      </ul>
+      <ul className={styles.logs}>
+        {logs.map((route) => {
+          if (route.publicOnly && user) return null;
+          if (route.private && !user) return null;
+          return (
+            <li key={route.id}>
+              <NavLink key={route.id} to={route.to}>
                 {route.text}
               </NavLink>
             </li>

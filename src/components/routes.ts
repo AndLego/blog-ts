@@ -25,6 +25,9 @@ export const routes: Route[] = [
     text: "Profile",
     private: true,
   },
+];
+
+export const logs: Route[] = [
   {
     id: 4,
     to: "/logIn",
@@ -38,4 +41,11 @@ export const routes: Route[] = [
     text: "LogOut",
     private: true,
   },
-];
+  {
+    id: 6,
+    to: "/register",
+    text: "Register",
+    private: false,
+    publicOnly: true,
+  },
+]

@@ -2,12 +2,21 @@
  * types Blog
  */
 
+export interface CommentProps {
+  id: string | number,
+  author: string,
+  content: string,
+  published: string
+}
+
 export interface Blog {
   title: string;
   slug: string;
   content: string;
   author: string;
   id: string | number;
+  published?: string
+  comments?: CommentProps[]
 }
 
 export interface EditBlog extends Omit<Blog, "author"> { }

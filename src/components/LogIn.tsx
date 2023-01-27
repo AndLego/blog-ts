@@ -1,12 +1,12 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 
 const LogIn = () => {
-  const username = React.useRef("");
+  const username = React.useRef<HTMLInputElement>(null!);
   const { login, user } = useAuth();
 
-  const handleForm = (e) => {
+  const handleForm = (e: FormEvent) => {
     e.preventDefault();
     login(username.current.value);
   };
@@ -16,15 +16,19 @@ const LogIn = () => {
   }
 
   return (
-    <>
+    <section className="LogIn">
       <h1>Login</h1>
 
       <form action="" onSubmit={handleForm}>
-        <label htmlFor="username">Username</label>
-        <input type="text" ref={username} id="username" />
+        <input
+          type="text"
+          ref={username}
+          id="username"
+          placeholder="Username"
+        />
         <button>Log In</button>
       </form>
-    </>
+    </section>
   );
 };
 

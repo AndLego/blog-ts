@@ -1,23 +1,21 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { useAuth } from "../utils/auth";
 
 const LogOut = () => {
-  const { logout } = useAuth();
+  const { logOut } = useAuth();
 
-  const handleForm = (e) => {
+  const handleForm = (e: FormEvent) => {
     e.preventDefault();
-    logout();
+    logOut();
   };
 
   return (
     <>
-      <h1>Wanna Log Out?</h1>
+      <section className="LogIn LogOut">
+        <h1>Wanna Log Out?</h1>
 
-      <form action="" onSubmit={handleForm}>
-        <label htmlFor="">Username</label>
-
-        <button>Log Out</button>
-      </form>
+        <button onClick={handleForm}>Yeah! Bye</button>
+      </section>
     </>
   );
 };

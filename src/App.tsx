@@ -9,6 +9,9 @@ import {
   LogOut,
   EditForm,
   Unauthorized,
+  Footer,
+  MainContainer,
+  CreatePost,
 } from "./components/index";
 import "./App.css";
 import { AuthProvider, AuthRoute } from "./utils/auth";
@@ -22,39 +25,51 @@ function App() {
           <BlogAPIProvider>
             <NavBar />
 
-            <Routes>
-              <Route path="/" element={<Home />} />
+            <MainContainer>
+              <Routes>
+                <Route path="/" element={<Home />} />
 
-              <Route path="/blog" element={<BlogMain />}>
-                <Route path=":slug" element={<BlogPost />} />
-              </Route>
+                <Route path="/blog" element={<BlogMain />}>
+                  <Route path=":slug" element={<BlogPost />} />
+                </Route>
 
-              <Route path="/blog/:slug/edit" element={<EditForm />} />
+                <Route path="/blog/:slug/edit" element={<EditForm />} />
 
-              {/* protegiendo la ruta profile */}
-              <Route
-                path="/profile"
-                element={
-                  <AuthRoute>
-                    <ProfilePage />
-                  </AuthRoute>
-                }
-              />
-              <Route path="/login" element={<LogIn />} />
+                {/* protegiendo la ruta profile */}
+                <Route
+                  path="/profile"
+                  element={
+                    <AuthRoute>
+                      <ProfilePage />
+                    </AuthRoute>
+                  }
+                />
+                <Route
+                  path="/createPost"
+                  element={
+                    <AuthRoute>
+                      <CreatePost />
+                    </AuthRoute>
+                  }
+                />
+                <Route path="/login" element={<LogIn />} />
 
-              <Route
-                path="/logout"
-                element={
-                  <AuthRoute>
-                    <LogOut />
-                  </AuthRoute>
-                }
-              />
+                <Route
+                  path="/logout"
+                  element={
+                    <AuthRoute>
+                      <LogOut />
+                    </AuthRoute>
+                  }
+                />
 
-              <Route path="/unauthorized" element={<Unauthorized />} />
+                <Route path="/unauthorized" element={<Unauthorized />} />
 
-              <Route path="*" element={<p>Not Found</p>} />
-            </Routes>
+                <Route path="*" element={<p>Not Found</p>} />
+              </Routes>
+            </MainContainer>
+
+            <Footer />
           </BlogAPIProvider>
         </AuthProvider>
       </HashRouter>

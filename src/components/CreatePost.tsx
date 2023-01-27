@@ -1,18 +1,23 @@
 import React, { FormEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../utils/auth";
 import { useAPI } from "../utils/blogAPI";
 
-interface CreatePostProps {
-  user: string;
-  update: boolean;
-  setUpdate: (update: boolean) => void;
-}
-
-const CreatePost = ({ user, update, setUpdate }: CreatePostProps) => {
-  const [create, setCreate] = React.useState(false);
+const CreatePost = () => {
+  const { user } = useAuth();
   const { addPost } = useAPI();
   const titleRef = React.useRef<HTMLInputElement>(null!);
-  const contentRef = React.useRef<HTMLInputElement>(null!);
+  const contentRef = React.useRef<HTMLTextAreaElement>(null!);
+  const navigate = useNavigate();
+
+  if (user?.rol.write !== true) {
+    return <Navigate to="/unauthorized" />;
+  }
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -28,35 +33,35 @@ const CreatePost = ({ user, update, setUpdate }: CreatePostProps) => {
       title: title,
       slug: slug,
       content: content,
-      author: user,
+      author: user.username,
+      published: new Date().toLocaleDateString(),
       id: uuidv4(),
     };
 
     addPost(post);
 
-    setUpdate(!update);
-  };
-  const handleCreate = () => {
-    setCreate(!create);
+    navigate(`/blog/${slug}`);
   };
 
   return (
     <>
-      <button onClick={handleCreate}>Create a New Post</button>
-      {create && (
-        <form action="" autoComplete="off" onSubmit={handleSubmit}>
-          <label htmlFor="title">
-            Title:
-            <input type="text" id="title" ref={titleRef} />
-          </label>
+      <form
+        className="EditForm"
+        action=""
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
+        <label htmlFor="title" id="marker">
+          Title:
+          <input type="text" id="title" ref={titleRef} />
+        </label>
 
-          <label htmlFor="content">
-            Content:
-            <input type="text" id="content" ref={contentRef} />
-          </label>
-          <button>Create Post</button>
-        </form>
-      )}
+        <label htmlFor="content">
+          Content:
+          <textarea rows={10} cols={50} id="content" ref={contentRef} />
+        </label>
+        <button className="CreateBtn">Create Post</button>
+      </form>
     </>
   );
 };

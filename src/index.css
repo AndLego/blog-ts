@@ -1,3 +1,12 @@
+:root {
+  --orange: #fb6d17;
+  --orange-btn: #FB8434;
+  --black: #333333;
+  --white: #f3f3f3;
+  --white-card: #ffffff;
+  --gray: #a9a9a9;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,4 +15,8 @@
 
 html {
   font-size: 62.5%;
+  font-family: "Roboto", sans-serif;
+  background: var(--white);
+  color: var(--black);
+  scroll-behavior: smooth;
 }

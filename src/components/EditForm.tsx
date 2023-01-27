@@ -7,7 +7,7 @@ const EditForm = () => {
   const { blogData, editPost } = useAPI();
   const { user } = useAuth();
   const editTitleRef = React.useRef<HTMLInputElement>(null!);
-  const editContentRef = React.useRef<HTMLInputElement>(null!);
+  const editContentRef = React.useRef<HTMLTextAreaElement>(null!);
 
   const navigate = useNavigate();
   const { slug } = useParams();
@@ -46,21 +46,22 @@ const EditForm = () => {
   };
 
   return (
-    <form action="" autoComplete="off" onSubmit={postEdit}>
+    <form className="EditForm" action="" autoComplete="off" onSubmit={postEdit}>
       <label htmlFor="title">
         Title:
         <input
           type="text"
           id="title"
           ref={editTitleRef}
-          defaultValue={editTitleRef.current?.value}
+          // defaultValue={editTitleRef.current?.value}
         />
       </label>
 
       <label htmlFor="content">
         Content:
-        <input
-          type="text"
+        <textarea
+          rows={10}
+          cols={50}
           id="content"
           ref={editContentRef}
           // defaultValue={editContentRef.current?.value}
