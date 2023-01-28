@@ -2,7 +2,7 @@ import React from "react";
 import { CommentProps } from "../@types/blog";
 import trash from "../assets/trash.svg";
 
-const CommentContainer = ({ comments }: { comments: CommentProps[] }) => {
+const CommentContainer = ({ comments = [] }: { comments: CommentProps[] }) => {
   if (comments.length === 0) {
     return <p>No comments yet </p>;
   }

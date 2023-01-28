@@ -58,6 +58,7 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
       author: post.author,
       published: post.published,
       id: post.id,
+      comments: [],
     };
 
     if (existingPost) {

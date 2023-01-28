@@ -7,11 +7,11 @@ interface AuthContextProps {
   login: (username: string | undefined) => void;
   logOut: () => void;
 }
-
+/**Context */
 const AuthContext = React.createContext<AuthContextProps>(
   {} as AuthContextProps
 );
-
+/**hard code Data */
 const defaultRoles: { [key: string]: Role } = {
   admin: {
     write: true,
@@ -41,6 +41,7 @@ const defaultUsers: User[] = [
   },
 ];
 
+/**Provider */
 const AuthProvider = ({ children }: ProviderProps) => {
   const [user, setUser] = React.useState<User | null>(null);
   const navigate = useNavigate();

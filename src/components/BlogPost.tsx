@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { useAPI } from "../utils/blogAPI";
 import arrow_back from "../assets/arrow_back.svg";
-import CommentContainer from "./Comment";
+import CommentContainer from "./CommentContainer";
 import CommentCreator from "./CommentCreator";
 
 const BlogPost = () => {
@@ -16,6 +16,12 @@ const BlogPost = () => {
   const [openCommentTab, setOpenCommentTab] = React.useState(false);
 
   const post = blogData.find((item) => item.slug === slug);
+
+  React.useEffect(() => {
+    if (post === undefined) {
+      navigate("/");
+    }
+  }, []);
 
   const handleBack = () => {
     navigate("/blog");
