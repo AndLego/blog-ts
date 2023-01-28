@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import { ProviderProps, Role, User } from "../@types/blog";
 
 interface AuthContextProps {
@@ -45,6 +45,11 @@ const defaultUsers: User[] = [
 const AuthProvider = ({ children }: ProviderProps) => {
   const [user, setUser] = React.useState<User | null>(null);
   const navigate = useNavigate();
+  const { state: locationState } = useLocation();
+
+  type RedirectLocationState = {
+    redirectTo: Location;
+  };
 
   const login = (username: string | undefined) => {
     //revisar si el usuario existe, de lo contrario lo crea como visitante
@@ -52,6 +57,11 @@ const AuthProvider = ({ children }: ProviderProps) => {
     rol !== undefined
       ? setUser(rol)
       : setUser({ username: username || "Anonimo", rol: defaultRoles.visitor });
+
+    if (locationState) {
+      const { redirectTo } = locationState as RedirectLocationState;
+      navigate(`${redirectTo.pathname}${redirectTo.search}`);
+    }
   };
 
   const logOut = () => {
@@ -79,9 +89,10 @@ function useAuth() {
 
 function AuthRoute({ children }: ProviderProps) {
   const { user } = useAuth();
+  const location = useLocation();
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace state={{ redirectTo: location }} />;
   }
   return <>{children}</>;
 }

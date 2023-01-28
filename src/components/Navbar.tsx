@@ -1,5 +1,5 @@
 import { logs, routes } from "./routes";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { Link } from "react-router-dom";
 import notebook from "../assets/notebook.svg";
@@ -8,6 +8,8 @@ import styles from "../styles/navbar.module.css";
 
 const Navbar = () => {
   const { user } = useAuth();
+
+  const location = useLocation();
 
   return (
     <nav className={styles.nav}>
@@ -40,6 +42,17 @@ const Navbar = () => {
         {logs.map((route) => {
           if (route.publicOnly && user) return null;
           if (route.private && !user) return null;
+          if (route.to === "/logIn") {
+            return (
+              <NavLink
+                key={route.id}
+                to={route.to}
+                state={{ redirectTo: location }}
+              >
+                {route.text}
+              </NavLink>
+            );
+          }
           return (
             <li key={route.id}>
               <NavLink key={route.id} to={route.to}>

@@ -1,5 +1,10 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { useAPI } from "../utils/blogAPI";
 import arrow_back from "../assets/arrow_back.svg";
@@ -9,6 +14,7 @@ import CommentCreator from "./CommentCreator";
 const BlogPost = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { blogData, deletePost } = useAPI();
   const { user } = useAuth();
@@ -37,8 +43,8 @@ const BlogPost = () => {
   };
 
   const handleComment = () => {
-    if (user === null) {
-      navigate("/login");
+    if (!user) {
+      navigate("/login", { replace: true, state: { redirectTo: location } });
     }
     setOpenCommentTab(!openCommentTab);
   };
@@ -70,7 +76,7 @@ const BlogPost = () => {
 
       {openCommentTab && (
         <CommentCreator
-          postId={post?.id}
+          postId={typeof post?.id === "string" ? post.id : ""}
           user={user?.username!}
           openCommentTab={openCommentTab}
           setOpenCommentTab={setOpenCommentTab}
