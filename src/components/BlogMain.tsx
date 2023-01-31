@@ -6,7 +6,7 @@ import { useAuth } from "../utils/auth";
 import { useAPI } from "../utils/blogAPI";
 
 const BlogMain = () => {
-  const { blogData } = useAPI();
+  const { fakeApi } = useAPI();
   const { user } = useAuth();
 
   const scrollTop = () => {
@@ -14,7 +14,7 @@ const BlogMain = () => {
   };
 
   /**sort data depending on recent date */
-  blogData.sort((a, b) => {
+  fakeApi.sort((a, b) => {
     if (a.published && b.published) {
       return (
         moment(b.published, "DD/MM/YYYY").toDate().getTime() -
@@ -36,10 +36,10 @@ const BlogMain = () => {
       <Outlet />
 
       <section className="BlogsContainer">
-        {blogData.map((blog: Blog) => (
+        {fakeApi.map((blog: Blog) => (
           <article key={blog.id}>
             <div>
-              <h6>{blog.author}</h6>
+              <h2>{blog.author}</h2>
               <p>{blog.published}</p>
             </div>
             <Link onClick={scrollTop} to={`/blog/${blog.slug}`}>

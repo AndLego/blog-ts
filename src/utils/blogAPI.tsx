@@ -1,56 +1,23 @@
 import React from "react";
 import { Blog, CommentProps, EditBlog, ProviderProps } from "../@types/blog";
+import { blogData } from "../utils/blogData";
 
 interface APIContextProps {
-  blogData: Blog[];
+  fakeApi: Blog[];
   addPost: (post: Blog) => void;
   editPost: (editedPost: EditBlog) => void;
   deletePost: (id: string | number) => void;
-  addComment: (postId: string | number, message: CommentProps) => void;
+  addComment: (postId: string, message: CommentProps) => void;
+  deleteComment: (postId: string, message: CommentProps) => void;
 }
 
 const APIContext = React.createContext<APIContextProps>({} as APIContextProps);
 
 const BlogAPIProvider = ({ children }: ProviderProps) => {
-  const blogData: Blog[] = [
-    {
-      title: "¿Que es React?",
-      slug: "que-es-react",
-      content: "React es el mejor Framework de JavaScript, que lindo React",
-      author: "Andrés Rodríguez",
-      id: 1,
-      published: new Date(1998, 11, 17).toLocaleDateString(),
-      comments: [
-        {
-          id: 1,
-          author: "Me",
-          content: "randome coment",
-          published: new Date().toLocaleDateString(),
-        },
-      ],
-    },
-    {
-      title: "¿Que es Angular?",
-      slug: "que-es-angular",
-      content: "Angular esta bien, que lindo React XD",
-      author: "Carlos Rodríguez",
-      id: 2,
-      published: new Date(1995, 11, 17).toLocaleDateString(),
-      comments: [],
-    },
-    {
-      title: "¿Que es Svelte?",
-      slug: "que-es-svelte",
-      content: "Svelte es el mejor Framework de JavaScript, que lindo Svelte",
-      author: "Felipe Rodríguez",
-      id: 3,
-      published: new Date(1996, 11, 17).toLocaleDateString(),
-      comments: [],
-    },
-  ];
+  const [fakeApi, setFakeApi] = React.useState(blogData);
 
   const addPost = (post: Blog) => {
-    const existingPost = blogData.find((item) => item.slug === post.slug);
+    const oldPost = fakeApi.findIndex((old) => old.slug === post.slug);
     const newPost: Blog = {
       title: post.title,
       slug: post.slug,
@@ -61,25 +28,25 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
       comments: [],
     };
 
-    if (existingPost) {
+    if (oldPost) {
       alert("ya existe un post con ese titulo");
+      return;
     }
 
-    blogData.push(newPost);
+    setFakeApi([...fakeApi, newPost]);
     console.log("post creado");
   };
 
   const deletePost = (id: string | number) => {
-    const post = blogData.findIndex((post) => post.id === id);
+    const post = fakeApi.findIndex((post) => post.id === id);
     if (post !== -1) {
-      blogData.splice(post, 1);
+      fakeApi.splice(post, 1);
     }
     console.log("post deleted");
   };
 
   const editPost = (editedPost: EditBlog) => {
-    // const post = blogData.find((post) => post.id === id);
-    blogData.find((post) => {
+    fakeApi.find((post) => {
       if (post.id === editedPost.id) {
         post.title = editedPost.title;
         post.slug = editedPost.slug;
@@ -88,15 +55,38 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
     });
   };
 
+  /**Comments handler */
+
   const addComment = (postId: string | number, message: CommentProps) => {
-    blogData.find((post) => {
-      if (post.id === postId) {
-        post.comments?.push(message);
-      }
-    });
+    const postIndex = fakeApi.findIndex((post) => post.id === postId);
+    if (postIndex !== -1) {
+      const post = fakeApi[postIndex];
+      setFakeApi([
+        ...fakeApi.slice(0, postIndex),
+        {
+          ...post,
+          comments: post.comments ? [...post.comments, message] : [message],
+        },
+        ...fakeApi.slice(postIndex + 1),
+      ]);
+    }
   };
 
-  const data = { blogData, addPost, deletePost, editPost, addComment };
+  const deleteComment = (postId: string | number, messageID: string) => {
+    const postIndex = fakeApi.findIndex((post) => post.id === postId);
+    if (postIndex !== -1) {
+      const commentIndex = fakeApi[postIndex].comments?.findIndex(
+        (comment) => comment.id === messageID
+      );
+      const comment = fakeApi[postIndex].comments?[commentIndex]
+      
+      if (commentIndex !== -1) {
+        fakeApi[postIndex].comments?.splice(commentIndex, 1);
+      }
+    }
+  };
+
+  const data = { fakeApi, addPost, deletePost, editPost, addComment };
 
   return <APIContext.Provider value={data}>{children}</APIContext.Provider>;
 };

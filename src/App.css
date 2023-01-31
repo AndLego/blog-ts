@@ -1,10 +1,13 @@
 h1 {
-  margin: 20px 0 20px 32px;
+  margin-left: 32px;
+  font-size: 3rem;
 }
 
 .Main {
-  min-height: 368px;
-  padding: 20px 0;
+  padding: 60px 0 100px;
+  margin: 0 auto;
+  max-width: 1200px;
+  min-height: calc(100vh - 100px);
 }
 
 /* HOME */
@@ -13,24 +16,26 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 68px;
 }
 .Home > h1 {
-  font-size: 4rem;
-  max-width: 400px;
+  font-size: 6rem;
+  max-width: 520px;
   letter-spacing: 1px;
+  text-align: center;
 }
 .Home > p {
-  font-size: 1.2rem;
+  font-size: 3.2rem;
   letter-spacing: 1px;
 }
 .Home > div {
   display: flex;
   gap: 20px;
+  font-size: 1.8rem;
 }
 .Home > div > a {
-  padding: 6px 12px;
-  border-radius: 20px;
+  padding: 10px 20px;
+  border-radius: 25px;
   cursor: pointer;
   text-decoration: none;
 }
@@ -49,20 +54,19 @@ h1 {
 section.BlogsContainer {
   width: 100%;
   padding: 0 48px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  display: flex;
   gap: 8px;
   row-gap: 12px;
-  margin-bottom: 28px;
+  margin: 28px 0;
+  flex-wrap: wrap;
 }
 
 article {
   display: flex;
-  gap: 12px;
-  max-width: 200px;
-  max-height: 150px;
+  gap: 20px;
   flex-direction: column;
-  padding: 20px 16px;
+  width: 320px;
+  padding: 40px 48px;
   background-color: var(--white-card);
   border-radius: 8px;
   box-shadow: 0px 8px 8px -8px rgb(225 166 133);
@@ -75,16 +79,16 @@ article > div {
 }
 
 article > div > p {
-  font-size: 0.5rem;
+  font-size: 1.2rem;
   letter-spacing: 1px;
-  font-weight: 600;
+  font-weight: 300;
 }
 
 article > a:first-of-type {
   text-decoration: none;
   font-weight: 600;
   color: var(--black);
-  font-size: 1.2rem;
+  font-size: 2.2rem;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -92,15 +96,15 @@ article > a:first-of-type {
 article > a:last-of-type {
   text-decoration: none;
   color: var(--black);
-  font-weight: 600;
-  font-size: 0.75rem;
+  font-weight: 300;
+  font-size: 1.75rem;
   position: relative;
 }
 
 article > a:last-of-type::before {
   content: "";
   position: absolute;
-  width: 12px;
+  width: 26px;
   height: 1px;
   background: var(--black);
   bottom: -2px;
@@ -114,12 +118,12 @@ section.Blog {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 32px;
   margin: 12px 0 24px;
 }
 section.Blog > button {
   padding: 2px 4px;
-  font-size: 0.8rem;
+  font-size: 1.4rem;
   cursor: pointer;
   border: none;
   display: flex;
@@ -127,15 +131,23 @@ section.Blog > button {
   gap: 4px;
 }
 section.Blog > button img {
-  width: 12px;
+  width: 20px;
 }
+
+section.Blog > p {
+  font-size: 2rem;
+  width: 100%;
+  overflow-wrap: break-word;
+  padding: 0 8px;
+}
+
 section.Blog > div.Btns {
   display: flex;
   gap: 8px;
 }
 section.Blog > div.Btns button {
-  padding: 2px 4px;
-  font-size: 0.8rem;
+  padding: 6px 12px;
+  font-size: 1.4rem;
   cursor: pointer;
 }
 
@@ -151,8 +163,8 @@ form.EditForm {
 form.EditForm > label {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: 1.2rem;
+  gap: 8px;
+  font-size: 2rem;
   padding: 8px 0;
   border-bottom: 1px solid var(--gray);
 }
@@ -163,16 +175,16 @@ form.EditForm > label:last-of-type {
 
 input#title {
   border: none;
-  height: 24px;
-  font-size: 1rem;
-  padding-left: 8px;
+  height: 40px;
+  font-size: 1.6rem;
+  padding-left: 20px;
   border-radius: 4px;
 }
 
 textarea#content {
   border: none;
-  font-size: 1rem;
-  padding: 4px 8px;
+  font-size: 1.6rem;
+  padding: 12px 20px;
   border-radius: 4px;
 }
 
@@ -182,20 +194,21 @@ textarea#content {
 }
 
 form.EditForm button {
-  padding: 2px 4px;
+  padding: 5px 10px;
   cursor: pointer;
   align-self: self-end;
+  font-size: 2rem;
 }
 
 /* Create Post */
 
 .Create {
-  margin: 0px 60px;
+  margin: 0px 30px;
   background-color: var(--orange);
-  color: var(--black);
+  color: var(--white-card);
   font-weight: 600;
-  font-size: 1.2rem;
-  padding: 4px 8px;
+  font-size: 2rem;
+  padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -209,10 +222,13 @@ footer.Footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
-  padding: 16px 0 8px;
-  font-size: 0.8rem;
+  gap: 36px;
+  padding: 32px 0 12px;
+  font-size: 1.2rem;
   font-weight: 600;
+  margin-top: 10px;
+  letter-spacing: 1px;
+  color: var(--white);
 }
 
 footer.Footer > div {
@@ -226,7 +242,17 @@ footer.Footer > div ul {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
+}
+
+footer.Footer > div div:last-of-type {
+  display: flex;
+  flex-direction: column;
+}
+
+footer.Footer > div img {
+  width: 24px;
+  filter: brightness(5.5);
 }
 
 /* LogIn */
@@ -235,10 +261,10 @@ section.LogIn {
   background-color: var(--white-card);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 200px;
+  gap: 40px;
+  max-width: 320px;
   align-items: center;
-  padding: 24px 0;
+  padding: 40px 0px;
   border-radius: 4px;
   margin: 40px auto;
   box-shadow: 0px 8px 8px -8px rgb(225 166 133);
@@ -249,12 +275,13 @@ section.LogIn h1 {
 section.LogIn form {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  width: 60%;
 }
 section.LogIn input {
-  height: 32px;
-  font-size: 1rem;
-  padding: 0 8px;
+  height: 40px;
+  font-size: 1.6rem;
+  padding: 0 12px;
   background-color: var(--white);
   border: 1px solid var(--gray);
   border-radius: 2px;
@@ -263,12 +290,13 @@ section.LogIn input:focus {
   outline: none;
 }
 section.LogIn button {
-  height: 32px;
+  height: 40px;
   border: none;
   background-color: var(--orange-btn);
   color: var(--white-card);
-  font-size: 1rem;
+  font-size: 2rem;
   border-radius: 2px;
+  cursor: pointer;
 }
 section.LogOut button {
   padding: 8px 16px;
@@ -281,7 +309,7 @@ section.LogOut button {
 .comments_container {
   position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 80%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -298,10 +326,11 @@ section.LogOut button {
   justify-content: space-between;
 }
 .comments_container > div:first-of-type p {
-  font-size: 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 .comments_container > p:last-of-type {
-  font-size: 0.85rem;
+  font-size: 1.6rem;
   word-break: break-all;
   margin-bottom: 4px;
 }
@@ -310,13 +339,14 @@ section.LogOut button {
   bottom: 0;
   right: 0;
   border: none;
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   padding: 2px 4px;
   cursor: pointer;
   margin-bottom: 4px;
+  gap: 4px;
 }
 .comments_container > button img {
-  width: 10px;
+  width: 12px;
 }

@@ -16,12 +16,12 @@ const BlogPost = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { blogData, deletePost } = useAPI();
+  const { fakeApi, deletePost } = useAPI();
   const { user } = useAuth();
 
   const [openCommentTab, setOpenCommentTab] = React.useState(false);
 
-  const post = blogData.find((item) => item.slug === slug);
+  const post = fakeApi.find((item) => item.slug === slug);
 
   React.useEffect(() => {
     if (post === undefined) {
@@ -55,9 +55,9 @@ const BlogPost = () => {
         <img src={arrow_back} alt="" />
         Back to Blogs
       </button>
-      <h2>{post?.title}</h2>
+      <h1>{post?.title}</h1>
       <div>
-        <h4>{post?.author}</h4>
+        <h2>{post?.author}</h2>
         <p>{post?.published}</p>
       </div>
       <p>{post?.content}</p>
@@ -83,7 +83,7 @@ const BlogPost = () => {
         />
       )}
 
-      <h5>Comments:</h5>
+      <h2>Comments:</h2>
       <CommentContainer comments={post?.comments!} />
     </section>
   );

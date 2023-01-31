@@ -4,7 +4,7 @@ import { useAuth } from "../utils/auth";
 import { useAPI } from "../utils/blogAPI";
 
 const EditForm = () => {
-  const { blogData, editPost } = useAPI();
+  const { fakeApi, editPost } = useAPI();
   const { user } = useAuth();
   const editTitleRef = React.useRef<HTMLInputElement>(null!);
   const editContentRef = React.useRef<HTMLTextAreaElement>(null!);
@@ -16,7 +16,7 @@ const EditForm = () => {
     return <Navigate to="/unauthorized" />;
   }
 
-  const post = blogData.filter((post) => post.slug === slug)[0];
+  const post = fakeApi.filter((post) => post.slug === slug)[0];
 
   React.useEffect(() => {
     if (editTitleRef.current) editTitleRef.current.value = post.title;
