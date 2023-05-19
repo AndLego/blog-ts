@@ -2,11 +2,14 @@
  * types Blog
  */
 
+export type ID = number | string | undefined;
+
 export interface CommentProps {
   id: string | number,
   author: string,
   content: string,
-  published: string
+  published: string,
+  timeFormated: string
 }
 
 export interface Blog {

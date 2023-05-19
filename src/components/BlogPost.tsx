@@ -76,7 +76,7 @@ const BlogPost = () => {
 
       {openCommentTab && (
         <CommentCreator
-          postId={typeof post?.id === "string" ? post.id : ""}
+          postId={post?.id}
           user={user?.username!}
           openCommentTab={openCommentTab}
           setOpenCommentTab={setOpenCommentTab}
@@ -84,7 +84,7 @@ const BlogPost = () => {
       )}
 
       <h2>Comments:</h2>
-      <CommentContainer comments={post?.comments!} />
+      <CommentContainer comments={post?.comments!} postId={post?.id} />
     </section>
   );
 };

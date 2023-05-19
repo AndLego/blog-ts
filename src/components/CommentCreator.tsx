@@ -1,10 +1,10 @@
 import React, { FormEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { CommentProps } from "../@types/blog";
+import { CommentProps, ID } from "../@types/blog";
 import { useAPI } from "../utils/blogAPI";
 
 interface CreatePostProps {
-  postId: string;
+  postId: ID;
   user: string;
   openCommentTab: boolean;
   setOpenCommentTab: (update: boolean) => void;
@@ -28,11 +28,24 @@ const CommentCreator = ({
       id: uuidv4(),
       author: user,
       content: content,
-      published: new Date().toLocaleDateString(),
+      published: new Date().toLocaleString(),
+      timeFormated: getFormattedDate()
     };
-    console.log(postId, newComment);
 
-    addComment(postId, newComment);
+    /**function to format published */
+    function getFormattedDate() {
+      const date = new Date();
+      const year = date.getUTCFullYear();
+      const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+      const day = date.getUTCDate().toString().padStart(2, "0");
+      const hours = date.getUTCHours().toString().padStart(2, "0");
+      const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+      const seconds = date.getUTCSeconds().toString().padStart(2, "0");
+
+      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
+    }
+
+    addComment(postId ?? "", newComment);
 
     setOpenCommentTab(!openCommentTab);
   };

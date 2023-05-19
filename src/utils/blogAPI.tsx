@@ -1,5 +1,5 @@
 import React from "react";
-import { Blog, CommentProps, EditBlog, ProviderProps } from "../@types/blog";
+import { Blog, CommentProps, EditBlog, ID, ProviderProps } from "../@types/blog";
 import { blogData } from "../utils/blogData";
 
 interface APIContextProps {
@@ -7,8 +7,8 @@ interface APIContextProps {
   addPost: (post: Blog) => void;
   editPost: (editedPost: EditBlog) => void;
   deletePost: (id: string | number) => void;
-  addComment: (postId: string, message: CommentProps) => void;
-  deleteComment: (postId: string, message: CommentProps) => void;
+  addComment: (postId: string | number, message: CommentProps) => void;
+  deleteComment: (postId: string | number | undefined, messageID: string | number | undefined) => void;
 }
 
 const APIContext = React.createContext<APIContextProps>({} as APIContextProps);
@@ -28,7 +28,7 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
       comments: [],
     };
 
-    if (oldPost) {
+    if (oldPost !== -1) {
       alert("ya existe un post con ese titulo");
       return;
     }
@@ -57,7 +57,8 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
 
   /**Comments handler */
 
-  const addComment = (postId: string | number, message: CommentProps) => {
+  const addComment = (postId: ID, message: CommentProps) => {
+
     const postIndex = fakeApi.findIndex((post) => post.id === postId);
     if (postIndex !== -1) {
       const post = fakeApi[postIndex];
@@ -72,21 +73,26 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
     }
   };
 
-  const deleteComment = (postId: string | number, messageID: string) => {
-    const postIndex = fakeApi.findIndex((post) => post.id === postId);
-    if (postIndex !== -1) {
-      const commentIndex = fakeApi[postIndex].comments?.findIndex(
-        (comment) => comment.id === messageID
-      );
-      const comment = fakeApi[postIndex].comments?[commentIndex]
-      
-      if (commentIndex !== -1) {
-        fakeApi[postIndex].comments?.splice(commentIndex, 1);
-      }
-    }
+  const deleteComment = (postId: string | number | undefined, messageID: string | number | undefined) => {
+    setFakeApi((prevFakeApi) =>
+      prevFakeApi.map((post) => {
+        if (post.id === postId) {
+          const updatedComments = post.comments?.filter(
+            (comment) => comment.id !== messageID
+          );
+          return {
+            ...post,
+            comments: updatedComments,
+          };
+        }
+        return post;
+      })
+    );
+
+    console.log("Comentario eliminado");
   };
 
-  const data = { fakeApi, addPost, deletePost, editPost, addComment };
+  const data = { fakeApi, addPost, deletePost, editPost, addComment, deleteComment };
 
   return <APIContext.Provider value={data}>{children}</APIContext.Provider>;
 };
