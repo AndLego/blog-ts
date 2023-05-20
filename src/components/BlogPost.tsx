@@ -10,6 +10,7 @@ import { useAPI } from "../utils/blogAPI";
 import arrow_back from "../assets/arrow_back.svg";
 import CommentContainer from "./CommentContainer";
 import CommentCreator from "./CommentCreator";
+import { CommentProps } from "../@types/blog";
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -19,9 +20,11 @@ const BlogPost = () => {
   const { fakeApi, deletePost } = useAPI();
   const { user } = useAuth();
 
-  const [openCommentTab, setOpenCommentTab] = React.useState(false);
-
   const post = fakeApi.find((item) => item.slug === slug);
+
+  const [openCommentTab, setOpenCommentTab] = React.useState(false);
+  const [sortType, setSortType] = React.useState("");
+  const [sortedComments, setSortedComments] = React.useState<CommentProps[]>([]);
 
   React.useEffect(() => {
     if (post === undefined) {
@@ -49,6 +52,43 @@ const BlogPost = () => {
     setOpenCommentTab(!openCommentTab);
   };
 
+  /**logic for sorting comments */
+
+  React.useEffect(() => {
+    let sorted;
+    if (sortType === "Newest") {
+      sorted = sortObjectsByPublished(post?.comments || [], "Newest");
+    } else {
+      sorted = post?.comments || [];
+    }
+    setSortedComments(sorted);
+  }, [post?.comments, sortType]);
+
+  const sortObjectsByPublished = (objects: CommentProps[], order: string) => {
+    const sorted = [...objects].sort((a, b) => {
+      const dateA = new Date(a.timeFormated);
+      const dateB = new Date(b.timeFormated);
+
+      if (order === "Newest") {
+        return dateB.getTime() - dateA.getTime();
+      } else if (order === "Oldest") {
+        return dateA.getTime() - dateB.getTime();
+      } else {
+        return 0;
+      }
+    });
+
+    return sorted;
+  };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedSortType = e.target.value;
+    const sorted = sortObjectsByPublished(post?.comments || [], selectedSortType);
+    setSortType(selectedSortType);
+    setSortedComments(sorted);
+  };
+
+  console.log("blogpost", sortedComments)
   return (
     <section className="Blog">
       <button onClick={handleBack}>
@@ -84,7 +124,12 @@ const BlogPost = () => {
       )}
 
       <h2>Comments:</h2>
-      <CommentContainer comments={post?.comments!} postId={post?.id} />
+      <CommentContainer
+        sortedComments={sortedComments}
+        postId={post?.id}
+        handleSortChange={handleSortChange}
+        sortType={sortType}
+      />
     </section>
   );
 };

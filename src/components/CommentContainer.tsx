@@ -4,40 +4,21 @@ import trash from "../assets/trash.svg";
 import { useAuth } from "../utils/auth";
 import { useAPI } from "../utils/blogAPI";
 
-const CommentContainer = ({ comments = [], postId }: { comments: CommentProps[], postId: string | number | undefined }) => {
+interface CommentContainerProps {
+  sortedComments: CommentProps[],
+  postId: string | number | undefined,
+  handleSortChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
+  sortType: string
+}
+
+const CommentContainer = ({ sortedComments, postId, handleSortChange, sortType }: CommentContainerProps) => {
   const { user } = useAuth();
   const { deleteComment } = useAPI();
 
-  const [sortType, setSortType] = React.useState("Newest");
-  const [sortedComments, setSortedComments] = React.useState(comments);
 
-  if (comments.length === 0) {
+  if (sortedComments.length === 0) {
     return <p>No comments yet</p>;
   }
-
-  const sortObjectsByPublished = (objects: CommentProps[], order: string) => {
-    const sorted = [...objects].sort((a, b) => {
-      const dateA = new Date(a.timeFormated);
-      const dateB = new Date(b.timeFormated);
-
-      if (order === "Newest") {
-        return dateB.getTime() - dateA.getTime();
-      } else if (order === "Oldest") {
-        return dateA.getTime() - dateB.getTime();
-      } else {
-        return 0;
-      }
-    });
-
-    return sorted;
-  };
-
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedSortType = e.target.value;
-    const sorted = sortObjectsByPublished(comments, selectedSortType);
-    setSortType(selectedSortType);
-    setSortedComments(sorted);
-  };
 
   return (
     <>
