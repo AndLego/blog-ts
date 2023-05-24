@@ -18,32 +18,38 @@ h1 {
   align-items: center;
   gap: 68px;
 }
-.Home > h1 {
+
+.Home>h1 {
   font-size: 6rem;
   max-width: 520px;
   letter-spacing: 1px;
   text-align: center;
 }
-.Home > p {
+
+.Home>p {
   font-size: 3.2rem;
   letter-spacing: 1px;
 }
-.Home > div {
+
+.Home>div {
   display: flex;
   gap: 20px;
   font-size: 1.8rem;
 }
-.Home > div > a {
+
+.Home>div>a {
   padding: 10px 20px;
   border-radius: 25px;
   cursor: pointer;
   text-decoration: none;
 }
-.Home > div > a:first-of-type {
+
+.Home>div>a:first-of-type {
   border: 1px solid var(--orange);
   color: var(--orange);
 }
-.Home > div > a:last-of-type {
+
+.Home>div>a:last-of-type {
   border: none;
   background-color: var(--orange);
   color: var(--white);
@@ -72,19 +78,19 @@ article {
   box-shadow: 0px 8px 8px -8px rgb(225 166 133);
 }
 
-article > div {
+article>div {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-article > div > p {
+article>div>p {
   font-size: 1.2rem;
   letter-spacing: 1px;
   font-weight: 300;
 }
 
-article > a:first-of-type {
+article>a:first-of-type {
   text-decoration: none;
   font-weight: 600;
   color: var(--black);
@@ -93,7 +99,7 @@ article > a:first-of-type {
   text-overflow: ellipsis;
 }
 
-article > a:last-of-type {
+article>a:last-of-type {
   text-decoration: none;
   color: var(--black);
   font-weight: 300;
@@ -101,7 +107,7 @@ article > a:last-of-type {
   position: relative;
 }
 
-article > a:last-of-type::before {
+article>a:last-of-type::before {
   content: "";
   position: absolute;
   width: 26px;
@@ -121,7 +127,8 @@ section.Blog {
   gap: 32px;
   margin: 12px 0 24px;
 }
-section.Blog > button {
+
+section.Blog>button {
   padding: 2px 4px;
   font-size: 1.4rem;
   cursor: pointer;
@@ -130,22 +137,24 @@ section.Blog > button {
   align-items: center;
   gap: 4px;
 }
-section.Blog > button img {
+
+section.Blog>button img {
   width: 20px;
 }
 
-section.Blog > p {
+section.Blog>p {
   font-size: 2rem;
   width: 100%;
   overflow-wrap: break-word;
   padding: 0 8px;
 }
 
-section.Blog > div.Btns {
+section.Blog>div.Btns {
   display: flex;
   gap: 8px;
 }
-section.Blog > div.Btns button {
+
+section.Blog>div.Btns button {
   padding: 6px 12px;
   font-size: 1.4rem;
   cursor: pointer;
@@ -160,7 +169,7 @@ form.EditForm {
   flex-direction: column;
 }
 
-form.EditForm > label {
+form.EditForm>label {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -169,7 +178,7 @@ form.EditForm > label {
   border-bottom: 1px solid var(--gray);
 }
 
-form.EditForm > label:last-of-type {
+form.EditForm>label:last-of-type {
   border-bottom: none;
 }
 
@@ -231,26 +240,26 @@ footer.Footer {
   color: var(--white);
 }
 
-footer.Footer > div {
+footer.Footer>div {
   display: flex;
   width: 80%;
   justify-content: space-evenly;
   align-items: center;
 }
 
-footer.Footer > div ul {
+footer.Footer>div ul {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-footer.Footer > div div:last-of-type {
+footer.Footer>div div:last-of-type {
   display: flex;
   flex-direction: column;
 }
 
-footer.Footer > div img {
+footer.Footer>div img {
   width: 24px;
   filter: brightness(5.5);
 }
@@ -269,15 +278,18 @@ section.LogIn {
   margin: 40px auto;
   box-shadow: 0px 8px 8px -8px rgb(225 166 133);
 }
+
 section.LogIn h1 {
   margin: 0;
 }
+
 section.LogIn form {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 60%;
 }
+
 section.LogIn input {
   height: 40px;
   font-size: 1.6rem;
@@ -285,10 +297,13 @@ section.LogIn input {
   background-color: var(--white);
   border: 1px solid var(--gray);
   border-radius: 2px;
+  width: 100%;
 }
+
 section.LogIn input:focus {
   outline: none;
 }
+
 section.LogIn button {
   height: 40px;
   border: none;
@@ -298,6 +313,7 @@ section.LogIn button {
   border-radius: 2px;
   cursor: pointer;
 }
+
 section.LogOut button {
   padding: 8px 16px;
   height: auto;
@@ -317,24 +333,29 @@ section.LogOut button {
   padding: 12px 0;
   border-bottom: 1px solid var(--gray);
 }
+
 .comments_container:last-of-type {
   border-bottom: none;
 }
-.comments_container > div:first-of-type {
+
+.comments_container>div:first-of-type {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.comments_container > div:first-of-type p {
+
+.comments_container>div:first-of-type p {
   font-size: 1.2rem;
   font-weight: 600;
 }
-.comments_container > p:last-of-type {
+
+.comments_container>p:last-of-type {
   font-size: 1.6rem;
   word-break: break-all;
   margin-bottom: 4px;
 }
-.comments_container > button {
+
+.comments_container>button {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -347,6 +368,48 @@ section.LogOut button {
   margin-bottom: 4px;
   gap: 4px;
 }
-.comments_container > button img {
+
+.comments_container>button img {
   width: 12px;
+}
+
+/* Register Css*/
+
+form label {
+  font-size: 1.8rem;
+}
+
+form select {
+  width: fit-content;
+  padding: 4px 12px;
+}
+
+form>div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.LogIn h5 {
+  font-size: 1.6rem;
+  text-transform: capitalize;
+  margin-bottom: -28px;
+}
+
+.LogIn ul {
+  list-style: none;
+  font-size: 1.26em;
+  font-weight: 600;
+}
+
+.LogIn ul li {
+  padding-bottom: 4px;
+}
+
+.LogIn .green {
+  color: green;
+}
+
+.LogIn .red {
+  color: red;
 }

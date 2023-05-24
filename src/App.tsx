@@ -12,6 +12,7 @@ import {
   Footer,
   MainContainer,
   CreatePost,
+  Register,
 } from "./components/index";
 import "./App.css";
 import { AuthProvider, AuthRoute } from "./utils/auth";
@@ -62,6 +63,8 @@ function App() {
                     </AuthRoute>
                   }
                 />
+
+                <Route path="/register" element={<Register />} />
 
                 <Route path="/unauthorized" element={<Unauthorized />} />
 

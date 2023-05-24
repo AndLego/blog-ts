@@ -37,12 +37,18 @@ export interface ProviderProps {
  */
 
 export interface Role {
-  write: boolean,
-  read: boolean,
-  delete: boolean,
+  name: string,
+  permissions: RoleDetail
+}
+
+export interface RoleDetail {
+  write: boolean;
+  read: boolean;
+  delete: boolean;
 }
 
 export interface User {
   username: string,
-  rol: Role
+  rol: Role,
+  id: string | number
 }

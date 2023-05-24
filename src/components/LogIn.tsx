@@ -25,6 +25,8 @@ const LogIn = () => {
           ref={username}
           id="username"
           placeholder="Username"
+          required
+          minLength={3}
         />
         <button>Log In</button>
       </form>

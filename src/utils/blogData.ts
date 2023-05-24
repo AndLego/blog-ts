@@ -1,4 +1,4 @@
-import { Blog } from "../@types/blog";
+import { Blog, Role, User } from "../@types/blog";
 
 export const blogData: Blog[] = [
     {
@@ -27,5 +27,45 @@ export const blogData: Blog[] = [
         id: 3,
         published: new Date(1996, 11, 17).toLocaleDateString(),
         comments: [],
+    },
+];
+
+export const defaultRoles: Role[] = [
+    {
+        name: "admin",
+        permissions: {
+            write: true,
+            read: true,
+            delete: true,
+        },
+    },
+    {
+        name: "editor",
+        permissions: {
+            write: true,
+            read: true,
+            delete: false,
+        },
+    },
+    {
+        name: "visitor",
+        permissions: {
+            write: false,
+            read: true,
+            delete: false,
+        },
+    },
+];
+
+export const blogUsers: User[] = [
+    {
+        username: "Andres",
+        rol: defaultRoles[0],
+        id: 1
+    },
+    {
+        username: "Felipe",
+        rol: defaultRoles[1],
+        id: 2
     },
 ];

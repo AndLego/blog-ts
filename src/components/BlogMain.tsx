@@ -1,4 +1,3 @@
-import React from "react";
 import moment from "moment";
 import { Link, Outlet } from "react-router-dom";
 import { Blog } from "../@types/blog";
@@ -52,7 +51,7 @@ const BlogMain = () => {
         ))}
       </section>
 
-      {user?.rol.write && (
+      {user?.rol.permissions.write && (
         <Link to="/createPost" className="Create">
           Create New Post
         </Link>

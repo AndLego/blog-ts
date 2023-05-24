@@ -10,3 +10,4 @@ export { default as Unauthorized } from "./Unauthorized.tsx";
 export { default as Footer } from "./Footer.tsx";
 export { default as MainContainer } from "./MainContainer.tsx";
 export { default as CreatePost } from "./CreatePost.tsx";
+export { default as Register } from "./Register.tsx";

@@ -11,7 +11,7 @@ const CreatePost = () => {
   const contentRef = React.useRef<HTMLTextAreaElement>(null!);
   const navigate = useNavigate();
 
-  if (user?.rol.write !== true) {
+  if (user?.rol.permissions.write !== true) {
     return <Navigate to="/unauthorized" />;
   }
 

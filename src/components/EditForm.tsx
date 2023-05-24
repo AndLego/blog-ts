@@ -12,7 +12,7 @@ const EditForm = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
 
-  if (user?.rol.write !== true) {
+  if (user?.rol.permissions.write !== true) {
     return <Navigate to="/unauthorized" />;
   }
 

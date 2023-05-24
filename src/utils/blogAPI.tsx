@@ -1,5 +1,5 @@
 import React from "react";
-import { Blog, CommentProps, EditBlog, ID, ProviderProps } from "../@types/blog";
+import { Blog, CommentProps, EditBlog, ID, ProviderProps, User } from "../@types/blog";
 import { blogData } from "../utils/blogData";
 
 interface APIContextProps {
@@ -92,7 +92,14 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
     console.log("Comentario eliminado");
   };
 
-  const data = { fakeApi, addPost, deletePost, editPost, addComment, deleteComment };
+  const data = {
+    fakeApi,
+    addPost,
+    deletePost,
+    editPost,
+    addComment,
+    deleteComment,
+  };
 
   return <APIContext.Provider value={data}>{children}</APIContext.Provider>;
 };

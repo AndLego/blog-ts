@@ -1,49 +1,23 @@
 import React from "react";
 import { useNavigate, Navigate, useLocation } from "react-router-dom";
-import { ProviderProps, Role, User } from "../@types/blog";
+import { ProviderProps, User } from "../@types/blog";
+import { defaultRoles, blogUsers } from "./blogData";
 
 interface AuthContextProps {
   user: User | null;
   login: (username: string | undefined) => void;
   logOut: () => void;
+  registerUser: (newUser: User) => void
 }
 /**Context */
 const AuthContext = React.createContext<AuthContextProps>(
   {} as AuthContextProps
 );
-/**hard code Data */
-const defaultRoles: { [key: string]: Role } = {
-  admin: {
-    write: true,
-    read: true,
-    delete: true,
-  },
-  editor: {
-    write: true,
-    read: true,
-    delete: false,
-  },
-  visitor: {
-    write: false,
-    read: true,
-    delete: false,
-  },
-};
-
-const defaultUsers: User[] = [
-  {
-    username: "Andres",
-    rol: defaultRoles.admin,
-  },
-  {
-    username: "Felipe",
-    rol: defaultRoles.editor,
-  },
-];
 
 /**Provider */
 const AuthProvider = ({ children }: ProviderProps) => {
   const [user, setUser] = React.useState<User | null>(null);
+  const [usersData, setUsersData] = React.useState(blogUsers)
   const navigate = useNavigate();
   const { state: locationState } = useLocation();
 
@@ -52,15 +26,24 @@ const AuthProvider = ({ children }: ProviderProps) => {
   };
 
   const login = (username: string | undefined) => {
-    //revisar si el usuario existe, de lo contrario lo crea como visitante
-    const rol = defaultUsers.find((user) => user.username === username);
-    rol !== undefined
-      ? setUser(rol)
-      : setUser({ username: username || "Anonimo", rol: defaultRoles.visitor });
 
-    if (locationState) {
-      const { redirectTo } = locationState as RedirectLocationState;
-      navigate(`${redirectTo.pathname}${redirectTo.search}`);
+    //revisar si el usuario existe, de lo contrario lo crea como visitante
+    const rol = usersData.find((user) => user.username === username);
+
+
+    if (rol !== undefined) {
+      setUser(rol)
+
+      if (locationState) {
+        const { redirectTo } = locationState as RedirectLocationState;
+        navigate(`${redirectTo.pathname}${redirectTo.search}`);
+      } else {
+        navigate("/profile", { replace: true });
+      }
+
+    } else {
+      alert("Please Register")
+      navigate("/register", { replace: true });
     }
   };
 
@@ -69,7 +52,26 @@ const AuthProvider = ({ children }: ProviderProps) => {
     navigate("/");
   };
 
-  const auth = { user, login, logOut };
+  /**user registers */
+
+  /**revisa si el usuario existe, de no ser asi lo ingresa al sistema, de lo contrario
+   * devuelve un mensaje
+   */
+  const registerUser = (newUser: User) => {
+    const existingUserId = usersData.findIndex(user => user.username === newUser.username)
+    if (existingUserId === -1) {
+      setUsersData([...usersData, newUser])
+
+      setUser(newUser)
+      navigate("/profile", { replace: true });
+
+      console.log("User Created")
+    } else {
+      alert("User already exist")
+    }
+  }
+
+  const auth = { user, login, logOut, registerUser };
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
@@ -97,4 +99,4 @@ function AuthRoute({ children }: ProviderProps) {
   return <>{children}</>;
 }
 
-export { AuthProvider, useAuth, defaultUsers, AuthRoute };
+export { AuthProvider, useAuth, blogUsers, AuthRoute };

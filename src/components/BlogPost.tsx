@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Navigate,
   useLocation,
   useNavigate,
   useParams,
@@ -88,7 +87,6 @@ const BlogPost = () => {
     setSortedComments(sorted);
   };
 
-  console.log("blogpost", sortedComments)
   return (
     <section className="Blog">
       <button onClick={handleBack}>
@@ -103,11 +101,11 @@ const BlogPost = () => {
       <p>{post?.content}</p>
 
       <div className="Btns">
-        {user?.rol.write || user?.username === post?.author ? (
+        {user?.rol.permissions.write || user?.username === post?.author ? (
           <button onClick={handleEdit}>Edit</button>
         ) : null}
 
-        {user?.rol.delete || user?.username === post?.author ? (
+        {user?.rol.permissions.delete || user?.username === post?.author ? (
           <button onClick={handleDelete}>Delete Post</button>
         ) : null}
 
