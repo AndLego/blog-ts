@@ -5,7 +5,7 @@ export const blogData: Blog[] = [
         title: "¿Que es React?",
         slug: "que-es-react",
         content: "React es el mejor Framework de JavaScript, que lindo React",
-        author: "Andrés Rodríguez",
+        author: "Andres",
         id: 1,
         published: new Date(1998, 11, 17).toLocaleDateString(),
         comments: [],
@@ -14,7 +14,7 @@ export const blogData: Blog[] = [
         title: "¿Que es Angular?",
         slug: "que-es-angular",
         content: "Angular esta bien, que lindo React XD",
-        author: "Carlos Rodríguez",
+        author: "Andres",
         id: 2,
         published: new Date(1995, 11, 17).toLocaleDateString(),
         comments: [],
@@ -57,15 +57,15 @@ export const defaultRoles: Role[] = [
     },
 ];
 
-export const blogUsers: User[] = [
-    {
-        username: "Andres",
-        rol: defaultRoles[0],
-        id: 1
-    },
-    {
-        username: "Felipe",
-        rol: defaultRoles[1],
-        id: 2
-    },
-];
+// export const blogUsers: User[] = [
+//     {
+//         username: "Andres",
+//         rol: defaultRoles[0],
+//         id: 1
+//     },
+//     {
+//         username: "Felipe",
+//         rol: defaultRoles[1],
+//         id: 2
+//     },
+// ];

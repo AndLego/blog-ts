@@ -35,20 +35,27 @@ const BlogMain = () => {
       <Outlet />
 
       <section className="BlogsContainer">
-        {fakeApi.map((blog: Blog) => (
-          <article key={blog.id}>
-            <div>
-              <h2>{blog.author}</h2>
-              <p>{blog.published}</p>
-            </div>
-            <Link onClick={scrollTop} to={`/blog/${blog.slug}`}>
-              {blog.title}
-            </Link>
-            <Link onClick={scrollTop} to={`/blog/${blog.slug}`}>
-              Start Reading
-            </Link>
-          </article>
-        ))}
+
+        {fakeApi.length === 0 ?
+          (<p>There's no blogs, create one!</p>) :
+
+          fakeApi.map((blog: Blog) => (
+            <article key={blog.id}>
+              <div>
+                <h2>{blog.author}</h2>
+                <p>{blog.published}</p>
+              </div>
+              <Link onClick={scrollTop} to={`/blog/${blog.slug}`}>
+                {blog.title}
+              </Link>
+              <Link onClick={scrollTop} to={`/blog/${blog.slug}`}>
+                Start Reading
+              </Link>
+            </article>
+          ))
+
+        }
+
       </section>
 
       {user?.rol.permissions.write && (

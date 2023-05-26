@@ -2,6 +2,8 @@
  * types Blog
  */
 
+import { actionType } from "../reducer/usersDatareducer";
+
 export type ID = number | string | undefined;
 
 export interface CommentProps {
@@ -51,4 +53,21 @@ export interface User {
   username: string,
   rol: Role,
   id: string | number
+}
+
+/**reducer types */
+interface CREATE_USER {
+  type: typeof actionType.CREATE_USER,
+  payload: User
+}
+
+export type Action = CREATE_USER
+// | ADD_POST | REMOVE_POST | ADD_COMMENT | REMOVE_COMMENT
+
+export interface ExtendedUser extends User {
+  posts?: {
+    id: string | number,
+    slug: string
+  }[]
+
 }

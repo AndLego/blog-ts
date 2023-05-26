@@ -1,6 +1,8 @@
 import React from "react";
 import { Blog, CommentProps, EditBlog, ID, ProviderProps, User } from "../@types/blog";
 import { blogData } from "../utils/blogData";
+import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
+import { firestore } from "../../firebaseConfig";
 
 interface APIContextProps {
   fakeApi: Blog[];
@@ -16,25 +18,56 @@ const APIContext = React.createContext<APIContextProps>({} as APIContextProps);
 const BlogAPIProvider = ({ children }: ProviderProps) => {
   const [fakeApi, setFakeApi] = React.useState(blogData);
 
-  const addPost = (post: Blog) => {
-    const oldPost = fakeApi.findIndex((old) => old.slug === post.slug);
-    const newPost: Blog = {
-      title: post.title,
-      slug: post.slug,
-      content: post.content,
-      author: post.author,
-      published: post.published,
-      id: post.id,
-      comments: [],
-    };
+  // const addPost = (post: Blog) => {
+  //   const oldPost = fakeApi.findIndex((old) => old.slug === post.slug);
+  //   const newPost: Blog = {
+  //     title: post.title,
+  //     slug: post.slug,
+  //     content: post.content,
+  //     author: post.author,
+  //     published: post.published,
+  //     id: post.id,
+  //     comments: [],
+  //   };
 
-    if (oldPost !== -1) {
-      alert("ya existe un post con ese titulo");
-      return;
-    }
+  //   if (oldPost !== -1) {
+  //     alert("ya existe un post con ese titulo");
+  //     return;
+  //   }
 
-    setFakeApi([...fakeApi, newPost]);
-    console.log("post creado");
+  //   setFakeApi([...fakeApi, newPost]);
+  //   console.log("post creado");
+  // };
+
+  const addPost = async (post: Blog) => {
+    // const postCollection = collection(firestore, "posts");
+    const oldPost = query(collection(firestore, "posts"));
+    console.log(oldPost)
+    // const querySnapshot = await getDocs(postQuery);
+
+    // if (!querySnapshot.empty) {
+    //   alert("Ya existe un post con ese título");
+    //   return;
+    // }
+
+    // const postDoc = doc(postCollection, post.id);
+
+    // const newPost = {
+    //   title: post.title,
+    //   slug: post.slug,
+    //   content: post.content,
+    //   author: post.author,
+    //   published: post.published,
+    //   id: post.id,
+    //   comments: [],
+    // };
+
+    // try {
+    //   await setDoc(postDoc, newPost);
+    //   console.log("Post agregado o actualizado con éxito");
+    // } catch (error) {
+    //   console.error("Error al agregar o actualizar el post: ", error);
+    // }
   };
 
   const deletePost = (id: string | number) => {

@@ -87,6 +87,8 @@ const BlogPost = () => {
     setSortedComments(sorted);
   };
 
+  console.log(post)
+
   return (
     <section className="Blog">
       <button onClick={handleBack}>

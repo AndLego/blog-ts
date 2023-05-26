@@ -413,3 +413,35 @@ form>div {
 .LogIn .red {
   color: red;
 }
+
+/*profile css*/
+
+.profile {
+  width: 80%;
+}
+
+.profile>div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile>div h3 {
+  font-size: 1.4rem;
+}
+
+.profile h5 {
+  margin: -28px auto 12px;
+  text-align: center;
+  border-bottom: 2px solid var(--orange);
+  padding-bottom: 12px;
+}
+
+.profile a {
+  font-size: 1.6rem;
+  text-decoration: none;
+  text-align: end;
+  text-transform: capitalize;
+  color: var(--orange-btn);
+  font-weight: 600;
+}
