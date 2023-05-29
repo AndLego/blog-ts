@@ -13,67 +13,87 @@ import {
   MainContainer,
   CreatePost,
   Register,
+  Loader
 } from "./components/index";
 import "./App.css";
 import { AuthProvider, AuthRoute } from "./utils/auth";
-import { BlogAPIProvider } from "./utils/blogAPI";
+import { BlogAPIProvider, useAPI } from "./utils/blogAPI";
+import Modal from "./components/Modal/Modal";
+import React from "react";
 
 function App() {
+  const { showModalPost, setShowModalPost, postState, isLoading } = useAPI()
+
+  console.log(isLoading)
   return (
     <>
       <HashRouter>
         <AuthProvider>
-          <BlogAPIProvider>
-            <NavBar />
 
-            <MainContainer>
-              <Routes>
-                <Route path="/" element={<Home />} />
+          <NavBar />
 
-                <Route path="/blog" element={<BlogMain />}>
-                  <Route path=":slug" element={<BlogPost />} />
-                </Route>
+          {isLoading ? <Loader /> : <></>}
 
-                <Route path="/blog/:slug/edit" element={<EditForm />} />
+          {
+            showModalPost ?
+              <Modal
+                postState={postState}
+                showModalPost={showModalPost}
+                setShowModalPost={setShowModalPost} />
+              :
+              <></>
+          }
 
-                {/* protegiendo la ruta profile */}
-                <Route
-                  path="/profile"
-                  element={
-                    <AuthRoute>
-                      <ProfilePage />
-                    </AuthRoute>
-                  }
-                />
-                <Route
-                  path="/createPost"
-                  element={
-                    <AuthRoute>
-                      <CreatePost />
-                    </AuthRoute>
-                  }
-                />
-                <Route path="/login" element={<LogIn />} />
+          <MainContainer>
+            <Routes>
+              <Route path="/" element={<Home />} />
 
-                <Route
-                  path="/logout"
-                  element={
-                    <AuthRoute>
-                      <LogOut />
-                    </AuthRoute>
-                  }
-                />
+              <Route path="/blog" element={<BlogMain />}>
+                <Route path=":slug" element={<BlogPost />} />
+              </Route>
 
-                <Route path="/register" element={<Register />} />
+              <Route path="/blog/:slug/edit" element={<EditForm />} />
 
-                <Route path="/unauthorized" element={<Unauthorized />} />
+              {/* protegiendo la ruta profile */}
+              <Route
+                path="/profile"
+                element={
+                  <AuthRoute>
+                    <ProfilePage />
+                  </AuthRoute>
+                }
+              />
+              <Route
+                path="/createPost"
+                element={
+                  <AuthRoute>
+                    <CreatePost
+                      setShowModalPost={setShowModalPost}
+                      showModalPost={showModalPost} />
+                  </AuthRoute>
+                }
+              />
+              <Route path="/login" element={<LogIn />} />
 
-                <Route path="*" element={<p>Not Found</p>} />
-              </Routes>
-            </MainContainer>
+              <Route
+                path="/logout"
+                element={
+                  <AuthRoute>
+                    <LogOut />
+                  </AuthRoute>
+                }
+              />
 
-            <Footer />
-          </BlogAPIProvider>
+              <Route path="/register" element={<Register />} />
+
+              <Route path="/unauthorized" element={<Unauthorized />} />
+
+              <Route path="*" element={<p>Not Found</p>} />
+            </Routes>
+          </MainContainer>
+
+          <Footer />
+
         </AuthProvider>
       </HashRouter>
     </>

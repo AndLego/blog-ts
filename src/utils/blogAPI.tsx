@@ -1,73 +1,82 @@
 import React from "react";
 import { Blog, CommentProps, EditBlog, ID, ProviderProps, User } from "../@types/blog";
 import { blogData } from "../utils/blogData";
-import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
-import { firestore } from "../../firebaseConfig";
+import { collection, query, where, getDocs, doc, setDoc, addDoc } from "firebase/firestore/lite";
+import { db } from "../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 interface APIContextProps {
   fakeApi: Blog[];
-  addPost: (post: Blog) => void;
+  addPost: (title: string, content: string, author: string) => void;
   editPost: (editedPost: EditBlog) => void;
   deletePost: (id: string | number) => void;
   addComment: (postId: string | number, message: CommentProps) => void;
   deleteComment: (postId: string | number | undefined, messageID: string | number | undefined) => void;
+  showModalPost: boolean;
+  setShowModalPost: React.Dispatch<React.SetStateAction<boolean>>;
+  postState: string;
+  isLoading: boolean
 }
 
 const APIContext = React.createContext<APIContextProps>({} as APIContextProps);
 
 const BlogAPIProvider = ({ children }: ProviderProps) => {
   const [fakeApi, setFakeApi] = React.useState(blogData);
+  /**LOADING */
+  const [isLoading, setLoading] = React.useState(false);
 
-  // const addPost = (post: Blog) => {
-  //   const oldPost = fakeApi.findIndex((old) => old.slug === post.slug);
-  //   const newPost: Blog = {
-  //     title: post.title,
-  //     slug: post.slug,
-  //     content: post.content,
-  //     author: post.author,
-  //     published: post.published,
-  //     id: post.id,
-  //     comments: [],
-  //   };
+  /**show or hide modal */
+  const [showModalPost, setShowModalPost] = React.useState(false)
 
-  //   if (oldPost !== -1) {
-  //     alert("ya existe un post con ese titulo");
-  //     return;
-  //   }
+  /**type of message in the modal */
+  const [postState, setPostState] = React.useState("")
 
-  //   setFakeApi([...fakeApi, newPost]);
-  //   console.log("post creado");
-  // };
+  const addPost = async (title: string, content: string, author: string) => {
 
-  const addPost = async (post: Blog) => {
-    // const postCollection = collection(firestore, "posts");
-    const oldPost = query(collection(firestore, "posts"));
-    console.log(oldPost)
-    // const querySnapshot = await getDocs(postQuery);
+    /**crear slug */
+    const slug = title
+      .replace(/[^\w\s]/gi, "")
+      .split(" ")
+      .join("-");
 
-    // if (!querySnapshot.empty) {
-    //   alert("Ya existe un post con ese título");
-    //   return;
-    // }
+    /**revisa si existe un post con el slug nuevo */
+    const oldPost = query(collection(db, 'posts'), where('slug', '==', slug));
 
-    // const postDoc = doc(postCollection, post.id);
+    try {
+      setLoading(true);
 
-    // const newPost = {
-    //   title: post.title,
-    //   slug: post.slug,
-    //   content: post.content,
-    //   author: post.author,
-    //   published: post.published,
-    //   id: post.id,
-    //   comments: [],
-    // };
+      const querySnapshot = await getDocs(oldPost);
 
-    // try {
-    //   await setDoc(postDoc, newPost);
-    //   console.log("Post agregado o actualizado con éxito");
-    // } catch (error) {
-    //   console.error("Error al agregar o actualizar el post: ", error);
-    // }
+      setLoading(false);
+
+      // Verificar si existen documentos con el mismo slug
+      if (!querySnapshot.empty) {
+        setPostState("duplicate")
+        setShowModalPost(true)
+        return;
+      }
+
+      // Si no existen documentos con el mismo slug, crea el nuevo post
+      const newPost: Blog = {
+        title: title,
+        slug: slug,
+        content: content,
+        author: author,
+        published: new Date().toLocaleDateString(),
+        comments: [],
+      };
+
+      /**añade post a firebase */
+      await addDoc(collection(db, 'posts'), newPost);
+
+      setPostState("success")
+
+    } catch (error) {
+      setLoading(false);
+      setPostState("error")
+      console.error('Error al agregar el post:', error);
+    }
+    setShowModalPost(true)
   };
 
   const deletePost = (id: string | number) => {
@@ -132,6 +141,10 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
     editPost,
     addComment,
     deleteComment,
+    showModalPost,
+    setShowModalPost,
+    postState,
+    isLoading
   };
 
   return <APIContext.Provider value={data}>{children}</APIContext.Provider>;

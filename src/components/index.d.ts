@@ -11,3 +11,5 @@ export { default as Footer } from "./Footer.tsx";
 export { default as MainContainer } from "./MainContainer.tsx";
 export { default as CreatePost } from "./CreatePost.tsx";
 export { default as Register } from "./Register.tsx";
+export { default as Loader } from "./Loader/Loader.tsx";
+

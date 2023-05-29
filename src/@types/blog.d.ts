@@ -19,7 +19,6 @@ export interface Blog {
   slug: string;
   content: string;
   author: string;
-  id: string | number;
   published?: string
   comments?: CommentProps[]
 }

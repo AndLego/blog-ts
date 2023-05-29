@@ -4,12 +4,16 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { useAPI } from "../utils/blogAPI";
 
-const CreatePost = () => {
+type CreatePostProps = {
+  setShowModalPost: React.Dispatch<React.SetStateAction<boolean>>;
+  showModalPost: boolean;
+};
+
+const CreatePost = ({ setShowModalPost, showModalPost }: CreatePostProps) => {
   const { user } = useAuth();
   const { addPost } = useAPI();
   const titleRef = React.useRef<HTMLInputElement>(null!);
   const contentRef = React.useRef<HTMLTextAreaElement>(null!);
-  const navigate = useNavigate();
 
   if (user?.rol.permissions.write !== true) {
     return <Navigate to="/unauthorized" />;
@@ -23,24 +27,10 @@ const CreatePost = () => {
     e.preventDefault();
 
     const title = titleRef.current.value;
-    const slug = title
-      .replace(/[^\w\s]/gi, "")
-      .split(" ")
-      .join("-");
     const content = contentRef.current.value;
+    const author = user.username
 
-    const post = {
-      title: title,
-      slug: slug,
-      content: content,
-      author: user.username,
-      published: new Date().toLocaleDateString(),
-      id: uuidv4(),
-    };
-
-    addPost(post);
-
-    navigate(`/blog/${slug}`);
+    addPost(title, content, author);
   };
 
   return (
@@ -53,12 +43,12 @@ const CreatePost = () => {
       >
         <label htmlFor="title" id="marker">
           Title:
-          <input type="text" id="title" ref={titleRef} />
+          <input type="text" id="title" ref={titleRef} required />
         </label>
 
         <label htmlFor="content">
           Content:
-          <textarea rows={10} cols={50} id="content" ref={contentRef} />
+          <textarea rows={10} cols={50} id="content" ref={contentRef} required />
         </label>
         <button className="CreateBtn">Create Post</button>
       </form>
