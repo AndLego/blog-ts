@@ -4,25 +4,26 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { useAuth } from "../utils/auth";
-import { useAPI } from "../utils/blogAPI";
-import arrow_back from "../assets/arrow_back.svg";
-import CommentContainer from "./CommentContainer";
-import CommentCreator from "./CommentCreator";
-import { CommentProps } from "../@types/blog";
+import { useAuth } from "../../utils/auth";
+import { useAPI } from "../../utils/blogAPI";
+import arrow_back from "../../assets/arrow_back.svg";
+import CommentContainer from "../Comments/CommentContainer";
+import CommentCreator from "../Comments/CommentCreator";
+import { CommentProps } from "../../@types/blog";
+import style from "./BlogPost.module.css"
 
 const BlogPost = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { fakeApi, deletePost } = useAPI();
+  const { postsArray, deletePost } = useAPI();
   const { user } = useAuth();
 
-  const post = fakeApi.find((item) => item.slug === slug);
+  const post = postsArray.find((item) => item.slug === slug);
 
   const [openCommentTab, setOpenCommentTab] = React.useState(false);
-  const [sortType, setSortType] = React.useState("");
+  const [sortType, setSortType] = React.useState("Newest");
   const [sortedComments, setSortedComments] = React.useState<CommentProps[]>([]);
 
   React.useEffect(() => {
@@ -36,7 +37,7 @@ const BlogPost = () => {
   };
 
   const handleDelete = () => {
-    deletePost(post!.id);
+    deletePost(post!.slug);
     navigate("/blog");
   };
 
@@ -69,9 +70,9 @@ const BlogPost = () => {
       const dateB = new Date(b.timeFormated);
 
       if (order === "Newest") {
-        return dateB.getTime() - dateA.getTime();
+        return +dateB - +dateA; // Utilizar el operador de suma para invertir el orden
       } else if (order === "Oldest") {
-        return dateA.getTime() - dateB.getTime();
+        return +dateA - +dateB;
       } else {
         return 0;
       }
@@ -87,10 +88,8 @@ const BlogPost = () => {
     setSortedComments(sorted);
   };
 
-  console.log(post)
-
   return (
-    <section className="Blog">
+    <section className={style.Blog}>
       <button onClick={handleBack}>
         <img src={arrow_back} alt="" />
         Back to Blogs
@@ -102,7 +101,7 @@ const BlogPost = () => {
       </div>
       <p>{post?.content}</p>
 
-      <div className="Btns">
+      <div className={style.Btns}>
         {user?.rol.permissions.write || user?.username === post?.author ? (
           <button onClick={handleEdit}>Edit</button>
         ) : null}
@@ -116,7 +115,7 @@ const BlogPost = () => {
 
       {openCommentTab && (
         <CommentCreator
-          postId={post?.id}
+          postSlug={post ? post.slug : ''}
           user={user?.username!}
           openCommentTab={openCommentTab}
           setOpenCommentTab={setOpenCommentTab}
@@ -126,7 +125,7 @@ const BlogPost = () => {
       <h2>Comments:</h2>
       <CommentContainer
         sortedComments={sortedComments}
-        postId={post?.id}
+        postSlug={post ? post.slug : ''}
         handleSortChange={handleSortChange}
         sortType={sortType}
       />

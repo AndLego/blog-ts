@@ -1,17 +1,18 @@
 import React, { FormEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { CommentProps, ID } from "../@types/blog";
-import { useAPI } from "../utils/blogAPI";
+import { CommentProps } from "../../@types/blog";
+import { useAPI } from "../../utils/blogAPI";
+import style from "./style/Comments.module.css"
 
 interface CreatePostProps {
-  postId: ID;
+  postSlug: string;
   user: string;
   openCommentTab: boolean;
   setOpenCommentTab: (update: boolean) => void;
 }
 
 const CommentCreator = ({
-  postId,
+  postSlug,
   user,
   openCommentTab,
   setOpenCommentTab,
@@ -44,8 +45,8 @@ const CommentCreator = ({
 
       return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
     }
-
-    addComment(postId ?? "", newComment);
+    console.log("slug", postSlug)
+    addComment(postSlug, newComment);
 
     setOpenCommentTab(!openCommentTab);
   };
@@ -53,14 +54,19 @@ const CommentCreator = ({
   return (
     <>
       <form
-        className="EditForm"
+        className={style.createComment}
         action=""
         autoComplete="off"
         onSubmit={handleSubmit}
       >
         <label htmlFor="content">
           Content:
-          <textarea rows={6} cols={20} id="content" ref={contentRef} />
+          <textarea
+            className={style.inputComment}
+            rows={6}
+            cols={20}
+            id="content"
+            ref={contentRef} />
         </label>
         <button className="CreateBtn">Post Comment</button>
       </form>

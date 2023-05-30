@@ -3,7 +3,7 @@ import {
   Home,
   NavBar,
   ProfilePage,
-  BlogMain,
+  BlogsContainer,
   BlogPost,
   LogIn,
   LogOut,
@@ -19,12 +19,10 @@ import "./App.css";
 import { AuthProvider, AuthRoute } from "./utils/auth";
 import { BlogAPIProvider, useAPI } from "./utils/blogAPI";
 import Modal from "./components/Modal/Modal";
-import React from "react";
 
 function App() {
   const { showModalPost, setShowModalPost, postState, isLoading } = useAPI()
 
-  console.log(isLoading)
   return (
     <>
       <HashRouter>
@@ -48,7 +46,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
 
-              <Route path="/blog" element={<BlogMain />}>
+              <Route path="/blog" element={<BlogsContainer />}>
                 <Route path=":slug" element={<BlogPost />} />
               </Route>
 

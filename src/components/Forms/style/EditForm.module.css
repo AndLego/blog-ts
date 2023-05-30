@@ -1,0 +1,46 @@
+form.EditForm {
+    width: 80%;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+form.EditForm>label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 2rem;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray);
+}
+
+form.EditForm>label:last-of-type {
+    border-bottom: none;
+}
+
+.inputTitle {
+    border: none;
+    height: 40px;
+    font-size: 1.6rem;
+    padding-left: 20px;
+    border-radius: 4px;
+}
+
+.textareaContent {
+    border: none;
+    font-size: 1.6rem;
+    padding: 12px 20px;
+    border-radius: 4px;
+}
+
+.inputTitle,
+.textareaContent {
+    outline: none;
+}
+
+form.EditForm button {
+    padding: 5px 10px;
+    cursor: pointer;
+    align-self: self-end;
+    font-size: 2rem;
+}

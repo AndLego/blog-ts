@@ -1,8 +1,8 @@
 import React, { FormEvent } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useAuth } from "../utils/auth";
-import { useAPI } from "../utils/blogAPI";
+import { useAuth } from "../../utils/auth";
+import { useAPI } from "../../utils/blogAPI";
+import style from "./style/EditForm.module.css"
 
 type CreatePostProps = {
   setShowModalPost: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,21 +36,31 @@ const CreatePost = ({ setShowModalPost, showModalPost }: CreatePostProps) => {
   return (
     <>
       <form
-        className="EditForm"
+        className={style.EditForm}
         action=""
         autoComplete="off"
         onSubmit={handleSubmit}
       >
         <label htmlFor="title" id="marker">
           Title:
-          <input type="text" id="title" ref={titleRef} required />
+          <input
+            className={style.inputTitle}
+            type="text"
+            id="title"
+            ref={titleRef}
+            required />
         </label>
 
         <label htmlFor="content">
           Content:
-          <textarea rows={10} cols={50} id="content" ref={contentRef} required />
+          <textarea
+            className={style.textareaContent}
+            rows={10}
+            cols={50}
+            id="content"
+            ref={contentRef} required />
         </label>
-        <button className="CreateBtn">Create Post</button>
+        <button className={style.CreateBtn}>Create Post</button>
       </form>
     </>
   );

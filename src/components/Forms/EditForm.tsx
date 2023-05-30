@@ -1,10 +1,11 @@
 import React, { FormEvent } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useAuth } from "../utils/auth";
-import { useAPI } from "../utils/blogAPI";
+import { useAuth } from "../../utils/auth";
+import { useAPI } from "../../utils/blogAPI";
+import style from "./style/EditForm.module.css"
 
 const EditForm = () => {
-  const { fakeApi, editPost } = useAPI();
+  const { postsArray, editPost } = useAPI();
   const { user } = useAuth();
   const editTitleRef = React.useRef<HTMLInputElement>(null!);
   const editContentRef = React.useRef<HTMLTextAreaElement>(null!);
@@ -16,7 +17,7 @@ const EditForm = () => {
     return <Navigate to="/unauthorized" />;
   }
 
-  const post = fakeApi.filter((post) => post.slug === slug)[0];
+  const post = postsArray.filter((post) => post.slug === slug)[0];
 
   React.useEffect(() => {
     if (editTitleRef.current) editTitleRef.current.value = post.title;
@@ -34,7 +35,6 @@ const EditForm = () => {
     const content = editContentRef.current.value;
 
     const editedPost = {
-      id: post.id,
       title: title,
       slug: slug,
       content: content,
@@ -46,11 +46,12 @@ const EditForm = () => {
   };
 
   return (
-    <form className="EditForm" action="" autoComplete="off" onSubmit={postEdit}>
+    <form className={style.EditForm} action="" autoComplete="off" onSubmit={postEdit}>
       <label htmlFor="title">
         Title:
         <input
           type="text"
+          className={style.inputTitle}
           id="title"
           ref={editTitleRef}
           // defaultValue={editTitleRef.current?.value}
@@ -60,6 +61,7 @@ const EditForm = () => {
       <label htmlFor="content">
         Content:
         <textarea
+        className={style.textareaContent}
           rows={10}
           cols={50}
           id="content"

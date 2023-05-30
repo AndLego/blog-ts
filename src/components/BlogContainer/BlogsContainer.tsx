@@ -1,23 +1,30 @@
 import moment from "moment";
 import { Link, Outlet } from "react-router-dom";
-import { Blog } from "../@types/blog";
-import { useAuth } from "../utils/auth";
-import { useAPI } from "../utils/blogAPI";
+import { Blog } from "../../@types/blog";
+import { useAuth } from "../../utils/auth";
+import { useAPI } from "../../utils/blogAPI";
+import React from "react";
+import style from "./BlogsContainer.module.css"
 
 const BlogMain = () => {
-  const { fakeApi } = useAPI();
+  const { postsArray, getPosts, postAdded } = useAPI();
   const { user } = useAuth();
 
   const scrollTop = () => {
     window.scrollTo(0, 0);
   };
 
+  /**calling post database */
+  React.useEffect(() => {
+    getPosts();
+  }, [postAdded]);
+
   /**sort data depending on recent date */
-  fakeApi.sort((a, b) => {
+  postsArray.sort((a, b) => {
     if (a.published && b.published) {
       return (
-        moment(b.published, "DD/MM/YYYY").toDate().getTime() -
-        moment(a.published, "DD/MM/YYYY").toDate().getTime()
+        moment(b.published, "DD/MM/YYYY HH:mm:ss").toDate().getTime() -
+        moment(a.published, "DD/MM/YYYY HH:mm:ss").toDate().getTime()
       );
     } else if (a.published) {
       return -1;
@@ -34,13 +41,13 @@ const BlogMain = () => {
 
       <Outlet />
 
-      <section className="BlogsContainer">
+      <section className={style.BlogsContainer}>
 
-        {fakeApi.length === 0 ?
-          (<p>There's no blogs, create one!</p>) :
+        {postsArray.length === 0 ?
+          (<p className={style.empty}>There's no blogs, create one!</p>) :
 
-          fakeApi.map((blog: Blog) => (
-            <article key={blog.id}>
+          postsArray.map((blog: Blog) => (
+            <article key={blog.slug}>
               <div>
                 <h2>{blog.author}</h2>
                 <p>{blog.published}</p>
@@ -59,7 +66,7 @@ const BlogMain = () => {
       </section>
 
       {user?.rol.permissions.write && (
-        <Link to="/createPost" className="Create">
+        <Link to="/createPost" className={style.Create}>
           Create New Post
         </Link>
       )}

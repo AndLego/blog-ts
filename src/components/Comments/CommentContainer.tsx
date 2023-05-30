@@ -1,20 +1,20 @@
 import React from "react";
-import { CommentProps } from "../@types/blog";
-import trash from "../assets/trash.svg";
-import { useAuth } from "../utils/auth";
-import { useAPI } from "../utils/blogAPI";
+import { CommentProps } from "../../@types/blog";
+import trash from "../../assets/trash.svg";
+import { useAuth } from "../../utils/auth";
+import { useAPI } from "../../utils/blogAPI";
+import style from "./style/Comments.module.css"
 
 interface CommentContainerProps {
   sortedComments: CommentProps[],
-  postId: string | number | undefined,
+  postSlug: string,
   handleSortChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
   sortType: string
 }
 
-const CommentContainer = ({ sortedComments, postId, handleSortChange, sortType }: CommentContainerProps) => {
+const CommentContainer = ({ sortedComments, postSlug, handleSortChange, sortType }: CommentContainerProps) => {
   const { user } = useAuth();
   const { deleteComment } = useAPI();
-
 
   if (sortedComments.length === 0) {
     return <p>No comments yet</p>;
@@ -28,14 +28,14 @@ const CommentContainer = ({ sortedComments, postId, handleSortChange, sortType }
       </select>
       {sortedComments.map((comment) => {
         return (
-          <div className="comments_container" key={comment.id}>
+          <div className={style.comments_container} key={comment.id}>
             <div>
               <h2>{comment.author}</h2>
               <p>{comment.published}</p>
             </div>
             <p>{comment.content}</p>
             {user?.username === comment.author && (
-              <button onClick={() => deleteComment(postId, comment.id)}>
+              <button onClick={() => deleteComment(postSlug, comment.id)}>
                 Delete
                 <img src={trash} alt="X" />
               </button>

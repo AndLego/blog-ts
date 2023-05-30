@@ -1,0 +1,87 @@
+.comments_container {
+    position: relative;
+    width: 100%;
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 auto;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray);
+}
+
+.comments_container:last-of-type {
+    border-bottom: none;
+}
+
+.comments_container>div:first-of-type {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.comments_container>div:first-of-type p {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.comments_container>p:last-of-type {
+    font-size: 1.6rem;
+    word-break: break-all;
+    margin-bottom: 4px;
+}
+
+.comments_container>button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: none;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    cursor: pointer;
+    margin-bottom: 4px;
+    gap: 4px;
+}
+
+.comments_container>button img {
+    width: 12px;
+}
+
+/*creador de comments css*/
+
+form.createComment {
+    width: 80%;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+form.createComment>label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 2rem;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray);
+}
+
+form.createComment>label:last-of-type {
+    border-bottom: none;
+}
+
+.inputComment {
+    border: none;
+    font-size: 1.6rem;
+    padding: 12px 20px;
+    border-radius: 4px;
+    outline: none;
+}
+
+form.createComment button {
+    padding: 5px 10px;
+    cursor: pointer;
+    align-self: self-end;
+    font-size: 2rem;
+}
