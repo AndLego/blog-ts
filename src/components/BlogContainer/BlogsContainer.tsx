@@ -16,13 +16,17 @@ const BlogMain = () => {
     getPosts();
   }, [postAdded]);
 
-  /**sort data depending on recent date */
+  /**sort data depending on recent date
+   * en caso de tener undefined asigna un date minimo para garantizar
+   * el llamdo de la funcion
+   */
   postsArray.sort((a, b) => {
-    const dateA = new Date(a.timeFormated);
-    const dateB = new Date(b.timeFormated);
+    const dateA = a.timeFormated ? new Date(a.timeFormated) : new Date(0);
+    const dateB = b.timeFormated ? new Date(b.timeFormated) : new Date(0);
 
     return dateB.getTime() - dateA.getTime();
   });
+
 
   return (
     <>
