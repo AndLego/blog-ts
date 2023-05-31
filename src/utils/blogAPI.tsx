@@ -23,7 +23,8 @@ interface APIContextProps {
   login: (username: string | undefined) => Promise<void>;
   logOut: () => void;
   user: User | null;
-  getUserPosts: (username: string) => Promise<string[] | null>
+  getUserPosts: (username: string) => Promise<string[] | null>;
+  getFormattedDate: () => string;
 }
 
 // // Simular un error
@@ -77,6 +78,20 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
     }
   };
 
+  /**date format with hour */
+  /**function to format published */
+  function getFormattedDate() {
+    const date = new Date();
+    const year = date.getUTCFullYear();
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const day = date.getUTCDate().toString().padStart(2, "0");
+    const hours = date.getUTCHours().toString().padStart(2, "0");
+    const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+    const seconds = date.getUTCSeconds().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
+  }
+
   /**funcion que crea un slug,  genera la coleccion si no existe y despues genera el nuevo
    * objeto en la database
    */
@@ -111,6 +126,7 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
         content: content,
         author: author,
         published: new Date().toLocaleDateString(),
+        timeFormated: getFormattedDate(),
         comments: [],
       };
 
@@ -375,20 +391,25 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
   };
 
   /**funcion que trae los posts del usuario actual */
-  const getUserPosts = async (username: string): Promise<string[] | null> => {
+  const getUserPosts = async (username: string) => {
     try {
+      setLoading(true);
+
       const userCollection = collection(db, 'users');
       const querySnapshot = await getDocs(query(userCollection, where('username', '==', username)));
 
       if (!querySnapshot.empty) {
         const userDoc = querySnapshot.docs[0];
-        const userData = userDoc.data() as User;
-        const posts = userData.posts?.map((post) => post.slug) || null;
+        const userData = userDoc.data();
+        const posts = userData.posts || [];
+        setLoading(false);
         return posts;
       } else {
-        return null;
+        setLoading(false);
+        return [];
       }
     } catch (error) {
+      setLoading(false);
       console.error('Error al obtener los posts del usuario:', error);
       return null;
     }
@@ -414,7 +435,8 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
     login,
     logOut,
     user,
-    getUserPosts
+    getUserPosts,
+    getFormattedDate
   };
 
   return <APIContext.Provider value={data}>{children}</APIContext.Provider>;

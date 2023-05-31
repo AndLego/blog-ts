@@ -19,7 +19,8 @@ export interface Blog {
   slug: string;
   content: string;
   author: string;
-  published?: string
+  published?: string;
+  timeFormated: string;
   comments?: CommentProps[]
 }
 

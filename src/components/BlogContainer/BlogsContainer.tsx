@@ -1,4 +1,3 @@
-import moment from "moment";
 import { Link, Outlet } from "react-router-dom";
 import { Blog } from "../../@types/blog";
 import { useAPI } from "../../utils/blogAPI";
@@ -19,18 +18,10 @@ const BlogMain = () => {
 
   /**sort data depending on recent date */
   postsArray.sort((a, b) => {
-    if (a.published && b.published) {
-      return (
-        moment(b.published, "DD/MM/YYYY HH:mm:ss").toDate().getTime() -
-        moment(a.published, "DD/MM/YYYY HH:mm:ss").toDate().getTime()
-      );
-    } else if (a.published) {
-      return -1;
-    } else if (b.published) {
-      return 1;
-    } else {
-      return 0;
-    }
+    const dateA = new Date(a.timeFormated);
+    const dateB = new Date(b.timeFormated);
+
+    return dateB.getTime() - dateA.getTime();
   });
 
   return (

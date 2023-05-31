@@ -4,7 +4,7 @@ import { useAPI } from "../utils/blogAPI";
 
 const ProfilePage = () => {
   const { user, getUserPosts } = useAPI();
-  const [posts, setPosts] = React.useState<string[] | null>([]);
+  const [posts, setPosts] = React.useState<string[] | null>(null);
 
   const loadUserPosts = async () => {
     try {
@@ -46,7 +46,7 @@ const ProfilePage = () => {
                     <h3>Check your posts:</h3>
                     {posts?.map((post) => (
                       <Link to={`/blog/${post}`} key={post}>
-                        {post.split("-").join(" ")}
+                        {post?.split("-")?.join(" ")}
                       </Link>
                     ))}
                   </div>
