@@ -6,7 +6,7 @@ import {
   BlogsContainer,
   BlogPost,
   LogIn,
-  LogOut,
+  Logout,
   EditForm,
   Unauthorized,
   Footer,
@@ -73,7 +73,7 @@ function App() {
               path="/logout"
               element={
                 <AuthRoute>
-                  <LogOut />
+                  <Logout />
                 </AuthRoute>
               }
             />

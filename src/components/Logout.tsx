@@ -1,7 +1,7 @@
-import React, { FormEvent } from "react";
+import { FormEvent } from "react";
 import { useAPI } from "../utils/blogAPI";
 
-const LogOut = () => {
+const Logout = () => {
   const { logOut } = useAPI();
 
   const handleForm = (e: FormEvent) => {
@@ -20,4 +20,4 @@ const LogOut = () => {
   );
 };
 
-export default LogOut;
+export default Logout;
