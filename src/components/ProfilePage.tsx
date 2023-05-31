@@ -1,12 +1,23 @@
 import React from "react";
-import { useAuth } from "../utils/auth";
 import { Link } from "react-router-dom";
+import { useAPI } from "../utils/blogAPI";
 
 const ProfilePage = () => {
-  const { user, userState } = useAuth();
+  const { user, getUserPosts } = useAPI();
+  const [posts, setPosts] = React.useState<string[] | null>([]);
 
-  const currentUser = userState.find(item => item.username === user?.username)
-  console.log("current User", currentUser)
+  const loadUserPosts = async () => {
+    try {
+      const userPosts = await getUserPosts(user!.username);
+      setPosts(userPosts)
+    } catch (error) {
+      console.error("Error getting user posts:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    loadUserPosts();
+  }, [user]);
 
   return (
     <>
@@ -18,21 +29,32 @@ const ProfilePage = () => {
         {user ? (
           <div className="profile">
             <h5>Welcome! {user.username}</h5>
-            {currentUser?.posts?.length === 0 ? (
-              <p>You have 0 posts</p>
-            ) : (
-              <div>
-                <h3> Check your posts:</h3>
-                {
-                  currentUser?.posts?.map(post => (
-                    <Link to={`/blog/${post.slug}`} key={post.id}>{
-                      post.slug.split("-").join(" ")
-                    }</Link>
-                  ))
-                }
-              </div>
+
+            {user.rol.permissions.write === false && (
+              <p>You are a visitor</p>
+            )}
+
+            {user.rol.permissions.write && (
+              <>
+                {posts?.length === 0 ? (
+                  <>
+                    <p>You have 0 posts</p>
+                    <Link to="/createPost" className="btnProfile">Create one</Link>
+                  </>
+                ) : (
+                  <div>
+                    <h3>Check your posts:</h3>
+                    {posts?.map((post) => (
+                      <Link to={`/blog/${post}`} key={post}>
+                        {post.split("-").join(" ")}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
+
         ) : (
           <p>Loading...</p>
         )}

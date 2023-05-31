@@ -1,13 +1,13 @@
 import { logs, routes } from "./routes";
 import { NavLink, useLocation } from "react-router-dom";
-import { useAuth } from "../utils/auth";
 import { Link } from "react-router-dom";
 import notebook from "../assets/notebook.svg";
 
 import styles from "../styles/navbar.module.css";
+import { useAPI } from "../utils/blogAPI";
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user } = useAPI();
 
   const location = useLocation();
 

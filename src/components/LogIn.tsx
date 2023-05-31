@@ -1,10 +1,9 @@
 import React, { FormEvent } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../utils/auth";
+import { useAPI } from "../utils/blogAPI";
 
 const LogIn = () => {
   const username = React.useRef<HTMLInputElement>(null!);
-  const { login, user } = useAuth();
+  const{login, user} = useAPI()
 
   const handleForm = (e: FormEvent) => {
     e.preventDefault();

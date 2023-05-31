@@ -1,8 +1,8 @@
 import React from "react";
-import { Blog, CommentProps, EditBlog, ID, ProviderProps, User } from "../@types/blog";
-import { blogData } from "../utils/blogData";
-import { collection, query, where, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc, getDoc } from "firebase/firestore/lite";
+import { Blog, CommentProps, EditBlog, ProviderProps, User } from "../@types/blog";
+import { collection, query, where, getDocs, doc, addDoc, updateDoc, deleteDoc, getDoc, arrayUnion, arrayRemove } from "firebase/firestore/lite";
 import { db } from "../../firebaseConfig";
+import { Navigate, useLocation } from "react-router-dom";
 
 interface APIContextProps {
   postsArray: Blog[];
@@ -14,9 +14,16 @@ interface APIContextProps {
   showModalPost: boolean;
   setShowModalPost: React.Dispatch<React.SetStateAction<boolean>>;
   postState: string;
-  isLoading: boolean
+  isLoading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setPostState: React.Dispatch<React.SetStateAction<string>>;
   getPosts: () => void;
-  postAdded: boolean
+  postAdded: boolean;
+  registerUser: (newUser: User) => Promise<void>;
+  login: (username: string | undefined) => Promise<void>;
+  logOut: () => void;
+  user: User | null;
+  getUserPosts: (username: string) => Promise<string[] | null>
 }
 
 // // Simular un error
@@ -27,7 +34,7 @@ const APIContext = React.createContext<APIContextProps>({} as APIContextProps);
 
 const BlogAPIProvider = ({ children }: ProviderProps) => {
   /**datos */
-  const [postsArray, setPostsArray] = React.useState(blogData);
+  const [postsArray, setPostsArray] = React.useState<Blog[]>([]);
 
   /**LOADING */
   const [isLoading, setLoading] = React.useState(false);
@@ -40,6 +47,10 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
 
   /**type of message in the modal */
   const [postState, setPostState] = React.useState("")
+
+  /**user state for login */
+  const [user, setUser] = React.useState<User | null>(null);
+
 
   /**Get posts from firebase */
   const getPosts = async () => {
@@ -85,10 +96,9 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
 
       const querySnapshot = await getDocs(oldPost);
 
-      setLoading(false);
-
       // Verificar si existen documentos con el mismo slug
       if (!querySnapshot.empty) {
+        setLoading(false);
         setPostState("duplicate")
         setShowModalPost(true)
         return;
@@ -106,6 +116,22 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
 
       /**añade post a firebase */
       await addDoc(collection(db, 'posts'), newPost);
+
+      // Añadir el slug al usuario actual
+      if (user) {
+        const userCollection = collection(db, 'users');
+        const querySnapshot = await getDocs(query(userCollection, where('username', '==', user.username)));
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0];
+          const userId = userDoc.id;
+
+          // Actualizar el campo 'posts' del usuario
+          const userDocRef = doc(userCollection, userId);
+          await updateDoc(userDocRef, {
+            posts: arrayUnion(slug),
+          });
+        }
+      }
 
       setPostState("success")
 
@@ -163,22 +189,40 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
       if (postDoc) {
         await deleteDoc(doc(postsCollection, postDoc.id));
         console.log("Post deleted from Firestore");
+
+        // Buscar el usuario correspondiente al post
+        const author = postDoc.data().author;
+        const usersCollection = collection(db, 'users');
+        const userQuerySnapshot = await getDocs(query(usersCollection, where('username', '==', author)));
+
+        if (!userQuerySnapshot.empty) {
+          const userDoc = userQuerySnapshot.docs[0];
+          const userId = userDoc.id;
+
+          // Actualizar el campo 'posts' del usuario
+          const userDocRef = doc(usersCollection, userId);
+          await updateDoc(userDocRef, {
+            posts: arrayRemove(slug),
+          });
+        }
+
+        // Obtener la base de datos actualizada y mostrar el modal
+        getPosts();
+        setPostState("deleted");
+        setShowModalPost(true);
       } else {
         console.log("Post not found");
       }
-
-      // se llama la base de datos actualizada y se muestra modal
-      getPosts();
-      setPostState("deleted")
-      setShowModalPost(true)
     } catch (error) {
-      setPostState("error")
-      setShowModalPost(true)
+      setPostState("error");
+      setShowModalPost(true);
       console.error("Error deleting post:", error);
     } finally {
       setLoading(false); // Desactivar el estado de carga
     }
   };
+
+
 
   /**Comments handler */
 
@@ -261,6 +305,96 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
     }
   };
 
+  /**users handler */
+
+  /**funcion que registra al usuario en la basee datos en la coleccion users, si encuentra
+   * un duplicado regresa un modal dando el error
+   */
+  const registerUser = async (newUser: User) => {
+    setLoading(true)
+
+    try {
+      // Verificar si el usuario ya existe en la colección "users"
+      const usersCollection = collection(db, "users");
+      const querySnapshot = await getDocs(query(usersCollection, where("username", "==", newUser.username)));
+
+      if (!querySnapshot.empty) {
+        setLoading(false);
+        setPostState("userDuplicated");
+        setShowModalPost(true);
+        return;
+      }
+
+      // Agregar el nuevo usuario a la colección "users"
+      await addDoc(usersCollection, newUser);
+
+      setPostState("userCreated");
+      setShowModalPost(true);
+    } catch (error) {
+      setPostState("error");
+      setShowModalPost(true);
+      console.error("Error creating user:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const login = async (username: string | undefined) => {
+    setLoading(true)
+
+    try {
+      // Verificar si el usuario existe en la colección "users"
+      const usersCollection = collection(db, 'users');
+      const querySnapshot = await getDocs(query(usersCollection, where('username', '==', username)));
+
+      if (!querySnapshot.empty) {
+        // Usuario encontrado, establecer el estado del usuario
+        const userData = querySnapshot.docs[0].data() as User;
+        setUser(userData);
+
+        setPostState("login");
+        setShowModalPost(true);
+      } else {
+        setPostState("register");
+        setShowModalPost(true);
+
+      }
+    } catch (error) {
+      setPostState("error");
+      setShowModalPost(true);
+      console.error('Error logging in:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logOut = () => {
+    setUser(null);
+    setPostState("logout");
+    setShowModalPost(true);
+  };
+
+  /**funcion que trae los posts del usuario actual */
+  const getUserPosts = async (username: string): Promise<string[] | null> => {
+    try {
+      const userCollection = collection(db, 'users');
+      const querySnapshot = await getDocs(query(userCollection, where('username', '==', username)));
+
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data() as User;
+        const posts = userData.posts?.map((post) => post.slug) || null;
+        return posts;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al obtener los posts del usuario:', error);
+      return null;
+    }
+  };
+
+
   const data = {
     postsArray,
     addPost,
@@ -271,9 +405,16 @@ const BlogAPIProvider = ({ children }: ProviderProps) => {
     showModalPost,
     setShowModalPost,
     postState,
+    setPostState,
     isLoading,
+    setLoading,
     getPosts,
-    postAdded
+    postAdded,
+    registerUser,
+    login,
+    logOut,
+    user,
+    getUserPosts
   };
 
   return <APIContext.Provider value={data}>{children}</APIContext.Provider>;
@@ -288,4 +429,19 @@ function useAPI() {
   return data;
 }
 
-export { BlogAPIProvider, useAPI };
+/**
+ * redireccion al login si no hay un usuario registrado
+ */
+
+function AuthRoute({ children }: ProviderProps) {
+  const { user } = useAPI();
+  const location = useLocation();
+
+  if (!user) {
+    return <Navigate to="/login" replace state={{ redirectTo: location }} />;
+  }
+
+  return <>{children}</>;
+}
+
+export { BlogAPIProvider, useAPI, AuthRoute };

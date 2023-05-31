@@ -1,14 +1,12 @@
 import moment from "moment";
 import { Link, Outlet } from "react-router-dom";
 import { Blog } from "../../@types/blog";
-import { useAuth } from "../../utils/auth";
 import { useAPI } from "../../utils/blogAPI";
 import React from "react";
 import style from "./BlogsContainer.module.css"
 
 const BlogMain = () => {
-  const { postsArray, getPosts, postAdded } = useAPI();
-  const { user } = useAuth();
+  const { postsArray, getPosts, postAdded, user } = useAPI();
 
   const scrollTop = () => {
     window.scrollTo(0, 0);

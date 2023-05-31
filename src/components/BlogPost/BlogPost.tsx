@@ -4,7 +4,6 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { useAuth } from "../../utils/auth";
 import { useAPI } from "../../utils/blogAPI";
 import arrow_back from "../../assets/arrow_back.svg";
 import CommentContainer from "../Comments/CommentContainer";
@@ -17,8 +16,7 @@ const BlogPost = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { postsArray, deletePost } = useAPI();
-  const { user } = useAuth();
+  const { postsArray, deletePost, user } = useAPI();
 
   const post = postsArray.find((item) => item.slug === slug);
 

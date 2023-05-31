@@ -1,7 +1,6 @@
 import React from "react";
 import { CommentProps } from "../../@types/blog";
 import trash from "../../assets/trash.svg";
-import { useAuth } from "../../utils/auth";
 import { useAPI } from "../../utils/blogAPI";
 import style from "./style/Comments.module.css"
 
@@ -13,8 +12,7 @@ interface CommentContainerProps {
 }
 
 const CommentContainer = ({ sortedComments, postSlug, handleSortChange, sortType }: CommentContainerProps) => {
-  const { user } = useAuth();
-  const { deleteComment } = useAPI();
+  const { deleteComment, user } = useAPI();
 
   if (sortedComments.length === 0) {
     return <p>No comments yet</p>;

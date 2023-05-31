@@ -1,9 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../utils/auth";
+import { useAPI } from "../utils/blogAPI";
 
 const Home = () => {
-  const { user } = useAuth();
+  const { user } = useAPI();
 
   return (
     <section className="Home">

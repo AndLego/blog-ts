@@ -1,8 +1,8 @@
 import React, { FormEvent } from "react";
-import { useAuth } from "../utils/auth";
+import { useAPI } from "../utils/blogAPI";
 
 const LogOut = () => {
-  const { logOut } = useAuth();
+  const { logOut } = useAPI();
 
   const handleForm = (e: FormEvent) => {
     e.preventDefault();

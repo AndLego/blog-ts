@@ -1,7 +1,7 @@
 import React from 'react';
 import check from "../../assets/check.svg"
 import wrong from "../../assets/wrong.svg"
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import style from "./Modal.module.css"
 
 type ModalProps = {
@@ -22,15 +22,39 @@ const Modal = ({ postState, showModalPost, setShowModalPost }: ModalProps) => {
         };
     }, []);
 
+    const { state: locationState } = useLocation();
+
+    type RedirectLocationState = {
+        redirectTo: Location;
+    };
+
     const handleClick = () => {
 
         setShowModalPost(!showModalPost)
         if (postState === "success") {
             navigate("/blog")
         }
-        if (postState === "error") {
+        if (postState === "error" || postState === "logout") {
             navigate("/")
         }
+        if (postState === "userCreated") {
+            navigate("/profile", { replace: true })
+        }
+        if (postState === "login") {
+            if (locationState) {
+                const { redirectTo } = locationState as RedirectLocationState;
+
+                redirectTo.pathname === '/register'
+                    ? navigate('/profile', { replace: true })
+                    : navigate(`${redirectTo.pathname}${redirectTo.search}`);
+            } else {
+                navigate('/profile', { replace: true });
+            }
+        }
+        if (postState === "register") {
+            navigate('/register', { replace: true });
+        }
+
     }
 
     type RenderState = {
@@ -46,6 +70,12 @@ const Modal = ({ postState, showModalPost, setShowModalPost }: ModalProps) => {
             message: "Post Created!",
             btn: "Continue",
             btnClassName: style.go
+        },
+        duplicate: {
+            img: wrong,
+            message: "There's already a post with that name",
+            btn: "Try again",
+            btnClassName: style.back
         },
         updated: {
             img: check,
@@ -76,7 +106,38 @@ const Modal = ({ postState, showModalPost, setShowModalPost }: ModalProps) => {
             message: "Comment Deleted!",
             btn: "Continue",
             btnClassName: style.go
-        }
+        },
+        userCreated: {
+            img: check,
+            message: "User Created!",
+            btn: "Continue",
+            btnClassName: style.go
+        },
+        userDuplicated: {
+            img: wrong,
+            message: "This user already exist",
+            btn: "Try Again",
+            btnClassName: style.back
+        },
+        register: {
+            img: wrong,
+            message: "Create a user first",
+            btn: "continue",
+            btnClassName: style.back
+        },
+        login: {
+            img: check,
+            message: "Welcome, have fun!",
+            btn: "continue",
+            btnClassName: style.go
+        },
+        logout: {
+            img: check,
+            message: "Bye!, hope to see you again",
+            btn: "continue",
+            btnClassName: style.go
+        },
+
     };
 
     const renderState = renderStateMap[postState] || {};

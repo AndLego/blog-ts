@@ -232,3 +232,15 @@ form>div {
   color: var(--orange-btn);
   font-weight: 600;
 }
+
+.profile p{
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+}
+
+.profile .btnProfile{
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: var(--orange-btn);
+  color: var(--black);
+}

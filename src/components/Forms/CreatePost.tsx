@@ -1,6 +1,5 @@
 import React, { FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useAuth } from "../../utils/auth";
 import { useAPI } from "../../utils/blogAPI";
 import style from "./style/EditForm.module.css"
 
@@ -9,9 +8,8 @@ type CreatePostProps = {
   showModalPost: boolean;
 };
 
-const CreatePost = ({ setShowModalPost, showModalPost }: CreatePostProps) => {
-  const { user } = useAuth();
-  const { addPost } = useAPI();
+const CreatePost = () => {
+  const { addPost, user } = useAPI();
   const titleRef = React.useRef<HTMLInputElement>(null!);
   const contentRef = React.useRef<HTMLTextAreaElement>(null!);
 

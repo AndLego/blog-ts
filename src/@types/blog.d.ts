@@ -49,24 +49,10 @@ export interface RoleDetail {
 }
 
 export interface User {
-  username: string,
-  rol: Role,
-  id: string | number
-}
-
-/**reducer types */
-interface CREATE_USER {
-  type: typeof actionType.CREATE_USER,
-  payload: User
-}
-
-export type Action = CREATE_USER
-// | ADD_POST | REMOVE_POST | ADD_COMMENT | REMOVE_COMMENT
-
-export interface ExtendedUser extends User {
+  username: string;
+  rol: Role;
   posts?: {
-    id: string | number,
-    slug: string
-  }[]
-
+    id: string | number;
+    slug: string;
+  }[];
 }

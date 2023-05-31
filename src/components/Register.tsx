@@ -1,15 +1,41 @@
 import React from 'react';
-import { defaultRoles } from '../utils/blogData';
 import { Role } from '../@types/blog';
-import { v4 as uuidv4 } from "uuid";
-import { useAuth } from '../utils/auth';
+import { useAPI } from '../utils/blogAPI';
+
+const defaultRoles: Role[] = [
+    {
+        name: "admin",
+        permissions: {
+            write: true,
+            read: true,
+            delete: true,
+        },
+    },
+    {
+        name: "editor",
+        permissions: {
+            write: true,
+            read: true,
+            delete: false,
+        },
+    },
+    {
+        name: "visitor",
+        permissions: {
+            write: false,
+            read: true,
+            delete: false,
+        },
+    },
+];
 
 const Register: React.FC = () => {
     const roles: Role[] = defaultRoles
     const userRef = React.useRef<HTMLInputElement>(null);
     const [showDetails, setShowDetails] = React.useState<Role | null>(roles[0])
 
-    const { registerUser } = useAuth()
+    // const { registerUser } = useAuth()
+    const { registerUser } = useAPI()
 
     const handleDetails = (currentRol: string) => {
         const currentDetails = roles.find(role => role.name === currentRol)
@@ -22,7 +48,7 @@ const Register: React.FC = () => {
         const newUser = {
             username: userRef.current?.value || "",
             rol: showDetails || roles[0],
-            id: uuidv4(),
+            posts: []
         }
 
         registerUser(newUser)

@@ -1,12 +1,10 @@
 import React, { FormEvent } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useAuth } from "../../utils/auth";
 import { useAPI } from "../../utils/blogAPI";
 import style from "./style/EditForm.module.css"
 
 const EditForm = () => {
-  const { postsArray, editPost } = useAPI();
-  const { user } = useAuth();
+  const { postsArray, editPost, user } = useAPI();
   const editTitleRef = React.useRef<HTMLInputElement>(null!);
   const editContentRef = React.useRef<HTMLTextAreaElement>(null!);
 
