@@ -20,7 +20,7 @@ export interface Blog {
   content: string;
   author: string;
   published?: string;
-  timeFormated: string;
+  timeFormated?: string;
   comments?: CommentProps[]
 }
 
